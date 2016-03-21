@@ -5,7 +5,7 @@ var HelloWorld = require('../develop/assets/jsx/helloworld.js');
 
 describe("helloworld",function(){
 	it('should render',function(){
-		myComponent = TestUtils.renderIntoDocument(<HelloWorld name='test'></HelloWorld>);
-		expect(ReactDOM.findDOMNode(myComponent).textContent).toContain("Hello");
+		var myComponent = TestUtils.renderIntoDocument(<HelloWorld name='test'></HelloWorld>);
+		expect(TestUtils.findRenderedDOMComponentWithTag(myComponent,'div').textContent).toContain("Hello");
 	});
 });
