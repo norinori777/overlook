@@ -227,7 +227,8 @@ h2 {
 
 .static-top .static-top__item {
   float: left;
-  width: auto; }
+  width: auto;
+  text-align: center; }
   .static-top .static-top__item > a {
     display: block;
     padding: 5px;
@@ -236,10 +237,21 @@ h2 {
     .static-top .static-top__item > a:hover {
       color: red; }
 
+.static-top .static-top--3 {
+  width: 33%; }
+
 .simple-header {
   background-color: #29aabf; }
   .simple-header .simple-header__title {
     color: #FFF;
     width: 80%;
     margin: 0 auto;
+    padding: 4px;
+    padding: 0.25rem;
     text-align: center; }
+  .simple-header .simple-header--lg {
+    font-size: 20px;
+    font-size: 1.25rem; }
+  .simple-header .simple-header--sm {
+    font-size: 14px;
+    font-size: 0.875rem; }

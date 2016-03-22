@@ -8,9 +8,9 @@ var SimpleHeader = React.createClass({displayName: "SimpleHeader",
 	},
 	render: function(){
 		var css_root = classNames('simple-header');
-		var css_title = classNames('simple-header__title');
+		var css_title = classNames('simple-header__title', 'simple-header--lg');
 
-		return (React.createElement("div", {className: css_root}, React.createElement("h1", {className: css_title}, this.props.title)));
+		return (React.createElement("div", {className: css_root}, React.createElement("p", {className: css_title}, this.props.title)));
 	}
 });
 
@@ -38,7 +38,8 @@ var SimpleHeader = require('./SimpleHeader.js');
 var items = [
 	{url:'http://hoge1.co.jp', title:'norinori1'},
 	{url:'http://hoge2.co.jp', title:'norinori2'},
-	{url:'http://hoge3.co.jp', title:'norinori3'}
+	{url:'http://hoge3.co.jp', title:'norinori3'},
+	{url:'http://hoge4.co.jp', title:'norinori4'}
 ]; 
 
 ReactDOM.render(
@@ -60,8 +61,9 @@ var StaticTop = React.createClass({displayName: "StaticTop",
 		items: React.PropTypes.array.isRequired
 	},
 	renderItems: function(values){
-		var items = [];
-		var css_item = classNames('static-top__item');
+/*		var num = this.props.items.length;
+*/		var items = [];
+		var css_item = classNames('static-top__item', 'static-top--4');
 
 		for(i = 0; i < values.length; i++){
 			items.push(React.createElement("li", {className: css_item}, React.createElement("a", {href: values[i].url}, values[i].title)));
@@ -71,6 +73,7 @@ var StaticTop = React.createClass({displayName: "StaticTop",
 	render: function(){
 		var css_root = classNames('static-top');
 		var css_list = classNames('static-top__list');
+
 
 		return (React.createElement("navi", {className: css_root}, React.createElement("ul", {className: css_list}, this.renderItems(this.props.items))));
 	}
