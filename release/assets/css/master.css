@@ -519,3 +519,81 @@ h2 {
     padding-top: 0.25em;
     padding-bottom: 0.25em;
     vertical-align: middle; }
+
+.simple-table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 16px;
+  margin-bottom: 1rem; }
+  .simple-table th, .simple-table td {
+    padding: 12px;
+    padding: 0.75rem;
+    vertical-align: top; }
+  .simple-table .simple-table {
+    background-color: #fff; }
+  .simple-table .simple-table__head > th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #eceeef; }
+  .simple-table .simple-table__body > th, .simple-table .simple-table__body td {
+    border-bottom: 2px solid #eceeef; }
+
+.table-active,
+.table-active > th,
+.table-active > td {
+  background-color: #f5f5f5; }
+
+.table-hover .table-active:hover {
+  background-color: #e8e8e8; }
+  .table-hover .table-active:hover > td,
+  .table-hover .table-active:hover > th {
+    background-color: #e8e8e8; }
+
+.table-success,
+.table-success > th,
+.table-success > td {
+  background-color: #dff0d8; }
+
+.table-hover .table-success:hover {
+  background-color: #d0e9c6; }
+  .table-hover .table-success:hover > td,
+  .table-hover .table-success:hover > th {
+    background-color: #d0e9c6; }
+
+.table-info,
+.table-info > th,
+.table-info > td {
+  background-color: #d9edf7; }
+
+.table-hover .table-info:hover {
+  background-color: #c4e3f3; }
+  .table-hover .table-info:hover > td,
+  .table-hover .table-info:hover > th {
+    background-color: #c4e3f3; }
+
+.table-warning,
+.table-warning > th,
+.table-warning > td {
+  background-color: #fcf8e3; }
+
+.table-hover .table-warning:hover {
+  background-color: #faf2cc; }
+  .table-hover .table-warning:hover > td,
+  .table-hover .table-warning:hover > th {
+    background-color: #faf2cc; }
+
+.table-danger,
+.table-danger > th,
+.table-danger > td {
+  background-color: #f2dede; }
+
+.table-hover .table-danger:hover {
+  background-color: #ebcccc; }
+  .table-hover .table-danger:hover > td,
+  .table-hover .table-danger:hover > th {
+    background-color: #ebcccc; }
+
+.table--responsive {
+  display: block;
+  width: 100%;
+  min-height: .01%;
+  overflow-x: auto; }
