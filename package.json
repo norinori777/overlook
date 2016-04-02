@@ -25,6 +25,7 @@
     "browserify": "^13.0.0",
     "classnames": "^2.2.3",
     "express": "^4.13.4",
+    "fluxxor": "^1.7.3",
     "fs": "0.0.2",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",

@@ -531,11 +531,11 @@ h2 {
     vertical-align: top; }
   .simple-table .simple-table {
     background-color: #fff; }
-  .simple-table .simple-table__head > th {
+  .simple-table .simple-table__head th {
     vertical-align: bottom;
-    border-bottom: 2px solid #eceeef; }
-  .simple-table .simple-table__body > th, .simple-table .simple-table__body td {
-    border-bottom: 2px solid #eceeef; }
+    border-bottom: 2px solid #e0dede; }
+  .simple-table .simple-table__body th, .simple-table .simple-table__body td {
+    border-bottom: 1px solid #e0dede; }
 
 .table-active,
 .table-active > th,

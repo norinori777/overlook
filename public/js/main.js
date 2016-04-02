@@ -73,6 +73,7 @@ var SimpleTable = React.createClass({displayName: "SimpleTable",
 	},
 	renderRow: function(values, num){
 		var row = [], i;
+		
 		if(this.props.isSetNum){
 			row.push(React.createElement("th", null, num+1));
 		}
@@ -82,17 +83,18 @@ var SimpleTable = React.createClass({displayName: "SimpleTable",
 		return row;
 	},
 	render: function(){
-		var table = classNames('table table--responsive');
-
+		var table = classNames('simple-table table--responsive'),
+		head = classNames('simple-table__head'),
+		body = classNames('simple-table__body');
 
 		return (
 			React.createElement("table", {className: table}, 
-				React.createElement("thead", null, 
+				React.createElement("thead", {className: head}, 
 					React.createElement("tr", null, 
 						this.renderHead(this.props.title)
 					)
 				), 
-				React.createElement("tbody", null, 
+				React.createElement("tbody", {className: body}, 
 					this.renderBody(this.props.rows)
 				)
 			)

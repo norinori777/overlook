@@ -2,6 +2,35 @@
 var React = require('react');
 var classNames = require('classnames');
 
+var HorizontalMenu = React.createClass({displayName: "HorizontalMenu",
+	propTypes: {
+		items: React.PropTypes.array.isRequired
+	},
+	renderItems: function(values){
+		var items = [], i;
+		var num = values.length;
+		var css_item = classNames('horizontalMenu__item', 'horizontalMenu--'+num);
+
+		for(i = 0; i < values.length; i++){
+			items.push(React.createElement("li", {className: css_item}, React.createElement("a", {href: values[i].url}, values[i].title)));
+		}
+		return items;
+	},
+	render: function(){
+		var css_root = classNames('horizontalMenu');
+		var css_list = classNames('horizontalMenu__list');
+
+		return (React.createElement("navi", {className: css_root}, React.createElement("ul", {className: css_list}, this.renderItems(this.props.items))));
+	}
+});
+
+module.exports = HorizontalMenu;
+
+
+},{"classnames":7,"react":164}],2:[function(require,module,exports){
+var React = require('react');
+var classNames = require('classnames');
+
 var Search = React.createClass({displayName: "Search",
 	propTypes: {
 		placeholder: React.PropTypes.string.isRequired
@@ -23,7 +52,7 @@ var Search = React.createClass({displayName: "Search",
 module.exports = Search;
 
 
-},{"classnames":7,"react":164}],2:[function(require,module,exports){
+},{"classnames":7,"react":164}],3:[function(require,module,exports){
 var React = require('react');
 var classNames = require('classnames');
 
@@ -42,7 +71,7 @@ var SimpleHeader = React.createClass({displayName: "SimpleHeader",
 module.exports = SimpleHeader;
 
 
-},{"classnames":7,"react":164}],3:[function(require,module,exports){
+},{"classnames":7,"react":164}],4:[function(require,module,exports){
 var React = require('react');
 var classNames = require('classnames');
 
@@ -73,6 +102,7 @@ var SimpleTable = React.createClass({displayName: "SimpleTable",
 	},
 	renderRow: function(values, num){
 		var row = [], i;
+		
 		if(this.props.isSetNum){
 			row.push(React.createElement("th", null, num+1));
 		}
@@ -82,17 +112,18 @@ var SimpleTable = React.createClass({displayName: "SimpleTable",
 		return row;
 	},
 	render: function(){
-		var table = classNames('table table--responsive');
-
+		var table = classNames('simple-table table--responsive'),
+		head = classNames('simple-table__head'),
+		body = classNames('simple-table__body');
 
 		return (
 			React.createElement("table", {className: table}, 
-				React.createElement("thead", null, 
+				React.createElement("thead", {className: head}, 
 					React.createElement("tr", null, 
 						this.renderHead(this.props.title)
 					)
 				), 
-				React.createElement("tbody", null, 
+				React.createElement("tbody", {className: body}, 
 					this.renderBody(this.props.rows)
 				)
 			)
@@ -103,10 +134,10 @@ var SimpleTable = React.createClass({displayName: "SimpleTable",
 module.exports = SimpleTable;
 
 
-},{"classnames":7,"react":164}],4:[function(require,module,exports){
+},{"classnames":7,"react":164}],5:[function(require,module,exports){
 var React = require('react'),
 ReactDOM = require('react-dom'),
-StaticTop = require('./static_top.js'),
+StaticTop = require('./HorizontalMenu.js'),
 SimpleHeader = require('./SimpleHeader.js'),
 Search = require('./Search.js');
 SimpleTable = require('./SimpleTable.js');
@@ -135,36 +166,7 @@ ReactDOM.render(
 );
 
 
-},{"./Search.js":1,"./SimpleHeader.js":2,"./SimpleTable.js":3,"./static_top.js":5,"react":164,"react-dom":8}],5:[function(require,module,exports){
-var React = require('react');
-var classNames = require('classnames');
-
-var StaticTop = React.createClass({displayName: "StaticTop",
-	propTypes: {
-		items: React.PropTypes.array.isRequired
-	},
-	renderItems: function(values){
-		var items = [], i;
-		var num = values.length;
-		var css_item = classNames('static-top__item', 'static-top--'+num);
-
-		for(i = 0; i < values.length; i++){
-			items.push(React.createElement("li", {className: css_item}, React.createElement("a", {href: values[i].url}, values[i].title)));
-		}
-		return items;
-	},
-	render: function(){
-		var css_root = classNames('static-top');
-		var css_list = classNames('static-top__list');
-
-		return (React.createElement("navi", {className: css_root}, React.createElement("ul", {className: css_list}, this.renderItems(this.props.items))));
-	}
-});
-
-module.exports = StaticTop;
-
-
-},{"classnames":7,"react":164}],6:[function(require,module,exports){
+},{"./HorizontalMenu.js":1,"./Search.js":2,"./SimpleHeader.js":3,"./SimpleTable.js":4,"react":164,"react-dom":8}],6:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -19246,6 +19248,6 @@ module.exports = warning;
 
 module.exports = require('./lib/React');
 
-},{"./lib/React":32}]},{},[4]);
+},{"./lib/React":32}]},{},[5]);
 
 //# sourceMappingURL=main.js.map
