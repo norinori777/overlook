@@ -1,7 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
-var StaticTop = require('../develop/assets/jsx/static_top.js');
+var StaticTop = require('../develop/assets/jsx/HorizontalMenu.js');
 
 describe("StaticTop",function(){
 	it('should render',function(){

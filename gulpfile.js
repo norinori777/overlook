@@ -20,7 +20,7 @@ gulp.task('watch',function(){
 });
 
 gulp.task('sass',function(){
-	gulp.src('./develop/assets/sass/*.scss')
+	gulp.src('./develop/assets/sass/**/*.scss')
 		.pipe(plumber())
 		.pipe(using())
 		.pipe(sass().on('error',function(err){

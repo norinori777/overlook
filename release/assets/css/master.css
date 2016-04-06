@@ -208,7 +208,7 @@ h2 {
   h2:hover {
     color: white; }
 
-.static-top .static-top__list {
+.horizontalMenu .horizontalMenu__list {
   *zoom: 1;
   margin: 0;
   padding-top: 10px;
@@ -217,46 +217,46 @@ h2 {
   padding-bottom: 0.625rem;
   list-style: none;
   background-color: #EDEDED; }
-  .static-top .static-top__list:after {
+  .horizontalMenu .horizontalMenu__list:after {
     content: "";
     display: table;
     clear: both; }
-  .static-top .static-top__list > li {
+  .horizontalMenu .horizontalMenu__list > li {
     border-right: solid 1px #C8C8C8; }
-  .static-top .static-top__list > li:first-child {
+  .horizontalMenu .horizontalMenu__list > li:first-child {
     border-left: solid 1px #C8C8C8; }
 
-.static-top .static-top__item {
+.horizontalMenu .horizontalMenu__item {
   float: left;
   width: auto;
   text-align: center; }
-  .static-top .static-top__item > a {
+  .horizontalMenu .horizontalMenu__item > a {
     display: block;
     padding: 5px;
     color: #000000;
     text-decoration: none; }
-    .static-top .static-top__item > a:hover {
+    .horizontalMenu .horizontalMenu__item > a:hover {
       color: #29aabf; }
 
-.static-top .static-top--2 {
+.horizontalMenu .horizontalMenu--2 {
   width: 48%; }
 
-.static-top .static-top--3 {
+.horizontalMenu .horizontalMenu--3 {
   width: 31%; }
 
-.static-top .static-top--4 {
+.horizontalMenu .horizontalMenu--4 {
   width: 23%; }
 
-.static-top .static-top--5 {
+.horizontalMenu .horizontalMenu--5 {
   width: 18%; }
 
-.static-top .static-top--6 {
+.horizontalMenu .horizontalMenu--6 {
   width: 14%; }
 
-.static-top .static-top--7 {
+.horizontalMenu .horizontalMenu--7 {
   width: 12%; }
 
-.static-top .static-top--8 {
+.horizontalMenu .horizontalMenu--8 {
   width: 10%; }
 
 .simple-header {
