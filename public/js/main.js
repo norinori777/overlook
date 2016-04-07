@@ -106,7 +106,7 @@ module.exports = ControlData;
 var React = require('react');
 var classNames = require('classNames');
 
-var DataList = React.createClass({displayName: "DataList",
+var List = React.createClass({displayName: "List",
 	propTypes: {
 		data: React.PropTypes.array.isRequired
 	},
@@ -124,6 +124,8 @@ var DataList = React.createClass({displayName: "DataList",
 		);
 	}
 });
+
+module.exports = List;
 
 },{"classNames":13,"react":268}],6:[function(require,module,exports){
 var React = require('react');
@@ -157,7 +159,7 @@ module.exports = HorizontalMenu;
 },{"classnames":14,"react":268}],7:[function(require,module,exports){
 var React = require('react'),
 classNames = require('classNames'),
-DataList = require('./DataList.js'),
+List = require('./DataList.js'),
 Fluxxor = require('fluxxor'),
 FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -170,7 +172,7 @@ var InputCandidate = React.createClass({displayName: "InputCandidate",
 		return(
 			React.createElement("div", null, 
 				React.createElement("input", {type: "text", placeholder: this.props.placeholder, onKeyDown: this.getKeyWord}), 
-				React.createElement(DataList, {candidate: this.props.candidate})
+				React.createElement(List, {data: this.props.candidate})
 			)
 		);
 	}
@@ -200,7 +202,7 @@ var Search = React.createClass({displayName: "Search",
 
 		return (
 			React.createElement("div", {className: search}, 
-				React.createElement("inputCandidate", {className: search__input, 
+				React.createElement(InputCandidate, {className: search__input, 
 					placeholder: this.props.placeholder, 
 					candidate: this.props.candidate, 
 					type: "text"}), 
@@ -330,7 +332,7 @@ var Main = React.createClass({displayName: "Main",
 				React.createElement(SimpleHeader, {title: 'NEW TEST SITE'}), 
 				React.createElement(HorizaontalMenu, {items: items}), 
 				React.createElement("br", null), 
-				React.createElement(Search, {placeholder: 'サービス名、または、ホスト名を入力'}), 
+				React.createElement(Search, {placeholder: 'サービス名、または、ホスト名を入力', candidate: this.state.candidate}), 
 				React.createElement("br", null), 
 				React.createElement(SimpleTable, {title: title, rows: rows, isSetNum: true})
 			)

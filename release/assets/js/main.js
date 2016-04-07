@@ -104,29 +104,6 @@ module.exports = ControlData;
 
 },{}],5:[function(require,module,exports){
 var React = require('react');
-var classNames = require('classNames');
-
-var DataList = React.createClass({displayName: "DataList",
-	propTypes: {
-		data: React.PropTypes.array.isRequired
-	},
-	renderItems: function(vlaues){
-		var items = [], i;
-
-		for(i=0; i < vlaues.length; i++){
-			items.push(React.createElement("option", {value: values[i]}));
-		};
-		return items;
-	},
-	render: function(){
-		return(
-			React.createElement("datalist", null, this.renderItems(this.props.data))
-		);
-	}
-});
-
-},{"classNames":13,"react":268}],6:[function(require,module,exports){
-var React = require('react');
 var classNames = require('classnames');
 
 var HorizontalMenu = React.createClass({displayName: "HorizontalMenu",
@@ -154,10 +131,10 @@ var HorizontalMenu = React.createClass({displayName: "HorizontalMenu",
 module.exports = HorizontalMenu;
 
 
-},{"classnames":14,"react":268}],7:[function(require,module,exports){
+},{"classnames":14,"react":268}],6:[function(require,module,exports){
 var React = require('react'),
 classNames = require('classNames'),
-DataList = require('./DataList.js'),
+List = require('./List.js'),
 Fluxxor = require('fluxxor'),
 FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -170,14 +147,39 @@ var InputCandidate = React.createClass({displayName: "InputCandidate",
 		return(
 			React.createElement("div", null, 
 				React.createElement("input", {type: "text", placeholder: this.props.placeholder, onKeyDown: this.getKeyWord}), 
-				React.createElement(DataList, {candidate: this.props.candidate})
+				React.createElement(List, {data: this.props.candidate})
 			)
 		);
 	}
 });
 module.exports = InputCandidate;
 
-},{"./DataList.js":5,"classNames":13,"fluxxor":15,"react":268}],8:[function(require,module,exports){
+},{"./List.js":7,"classNames":13,"fluxxor":15,"react":268}],7:[function(require,module,exports){
+var React = require('react');
+var classNames = require('classNames');
+
+var List = React.createClass({displayName: "List",
+	propTypes: {
+		data: React.PropTypes.array.isRequired
+	},
+	renderItems: function(vlaues){
+		var items = [], i;
+
+		for(i=0; i < vlaues.length; i++){
+			items.push(React.createElement("option", {value: values[i]}));
+		};
+		return items;
+	},
+	render: function(){
+		return(
+			React.createElement("datalist", null, this.renderItems(this.props.data))
+		);
+	}
+});
+
+module.exports = List;
+
+},{"classNames":13,"react":268}],8:[function(require,module,exports){
 var React = require('react'),
 classNames = require('classnames'),
 InputCandidate = require('./InputCandidate.js'),
@@ -200,7 +202,7 @@ var Search = React.createClass({displayName: "Search",
 
 		return (
 			React.createElement("div", {className: search}, 
-				React.createElement("inputCandidate", {className: search__input, 
+				React.createElement(InputCandidate, {className: search__input, 
 					placeholder: this.props.placeholder, 
 					candidate: this.props.candidate, 
 					type: "text"}), 
@@ -213,7 +215,7 @@ var Search = React.createClass({displayName: "Search",
 module.exports = Search;
 
 
-},{"./InputCandidate.js":7,"classnames":14,"fluxxor":15,"react":268}],9:[function(require,module,exports){
+},{"./InputCandidate.js":6,"classnames":14,"fluxxor":15,"react":268}],9:[function(require,module,exports){
 var React = require('react');
 var classNames = require('classnames');
 
@@ -330,7 +332,7 @@ var Main = React.createClass({displayName: "Main",
 				React.createElement(SimpleHeader, {title: 'NEW TEST SITE'}), 
 				React.createElement(HorizaontalMenu, {items: items}), 
 				React.createElement("br", null), 
-				React.createElement(Search, {placeholder: 'サービス名、または、ホスト名を入力'}), 
+				React.createElement(Search, {placeholder: 'サービス名、または、ホスト名を入力', candidate: this.state.candidate}), 
 				React.createElement("br", null), 
 				React.createElement(SimpleTable, {title: title, rows: rows, isSetNum: true})
 			)
@@ -344,7 +346,7 @@ var flux = new Fluxxor.Flux(stores, SearchActions);
 ReactDOM.render(React.createElement(Main, {flux: flux}), document.getElementById('main'));
 
 
-},{"../js/SearchAction.js":1,"../js/SearchStore.js":2,"../js/config.js":3,"./HorizontalMenu.js":6,"./Search.js":8,"./SimpleHeader.js":9,"./SimpleTable.js":10,"fluxxor":15,"react":268,"react-dom":112}],12:[function(require,module,exports){
+},{"../js/SearchAction.js":1,"../js/SearchStore.js":2,"../js/config.js":3,"./HorizontalMenu.js":5,"./Search.js":8,"./SimpleHeader.js":9,"./SimpleTable.js":10,"fluxxor":15,"react":268,"react-dom":112}],12:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};

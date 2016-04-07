@@ -23,6 +23,16 @@ configRoutes = function(app, server){
 		);
 	});
 
+	app.get('/:obj_type/:keyword',function(req,res){
+		var regexp = new RegExp("^" + req.params.keyword),
+		filter = {test:{$regex: regexp}};
+		crud.read(
+			req.params.obj_type,
+			filter,{},
+			function(map_list){res.json(map_list);}
+		);
+	});
+
 	app.post('/:obj_type',function(req,res){
 		var
 		user = auth(req),
