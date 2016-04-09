@@ -11,7 +11,9 @@ var SearchActions = {
 	getData: function(data){
 		var self = this;
 		ControlData('GET',
-					app_config.collection + '/' + data.keyword,
+/*					app_config.collection + '/' + data.keyword,
+*/					'/test' + '/' + data.keyword,
+
 					data,
 					function(data){
 						this.dispatch(constants.GET_DATA,data);
@@ -21,7 +23,8 @@ var SearchActions = {
 	getCandidate: function(data){
 		var self = this;
 		ControlData('GET',
-					app_config.collection + '/' + data.keyword,
+/*					app_config.collection + '/' + data.keyword,
+*/					'/test' + '/' + data.keyword,
 					data,
 					function(data){
 						this.dispatch(constants.GET_CANDIDATE,data);
@@ -56,8 +59,7 @@ var SearchStores = Fluxxor.createStore({
 	},
 	onGetCandidate: function(payload){
 		this.candidate = payload;
-		this.emit('chage');
-
+		this.emit('change');
 	},
 	getState: function(){
 		return {
@@ -73,8 +75,6 @@ module.exports = SearchStores;
 },{"fluxxor":15}],3:[function(require,module,exports){
 var app_config = {
 	collection: '/test'
-
-
 };
 
 module_exports = app_config;
@@ -139,14 +139,18 @@ Fluxxor = require('fluxxor'),
 FluxMixin = Fluxxor.FluxMixin(React);
 
 var InputCandidate = React.createClass({displayName: "InputCandidate",
-	mixin: [FluxMixin],
+	mixins: [FluxMixin],
+	propTypes: {
+		candidate: React.PropTypes.array.isRequired
+	},
 	getKeyWord: function(e){
-		return this.getFlux().action.getCandidate({keyword:e.target.value});
+		return this.getFlux().actions.getCandidate({keyword:e.target.value});
 	},
 	render: function(){
+		var search__input = classNames('search__input');
 		return(
 			React.createElement("div", null, 
-				React.createElement("input", {type: "text", placeholder: this.props.placeholder, onKeyDown: this.getKeyWord}), 
+				React.createElement("input", {className: search__input, type: "text", placeholder: this.props.placeholder, onChange: this.getKeyWord}), 
 				React.createElement(List, {data: this.props.candidate})
 			)
 		);
@@ -162,12 +166,13 @@ var List = React.createClass({displayName: "List",
 	propTypes: {
 		data: React.PropTypes.array.isRequired
 	},
-	renderItems: function(vlaues){
+	renderItems: function(values){
 		var items = [], i;
-
-		for(i=0; i < vlaues.length; i++){
-			items.push(React.createElement("option", {value: values[i]}));
-		};
+		if(undefined !== values && values.length){
+			for(i=0; i < values.length; i++){
+				items.push(React.createElement("option", {value: values[i]}));
+			};
+		}
 		return items;
 	},
 	render: function(){
@@ -187,7 +192,7 @@ Fluxxor = require('fluxxor'),
 FluxMixin = Fluxxor.FluxMixin(React);
 
 var Search = React.createClass({displayName: "Search",
-	mixin: [FluxMixin],
+	mixins: [FluxMixin],
 	propTypes: {
 		placeholder: React.PropTypes.string.isRequired,
 		candidate: React.PropTypes.array
@@ -197,16 +202,14 @@ var Search = React.createClass({displayName: "Search",
 	},
 	render: function(){
 		var search = classNames('search'),
-		search__input = classNames('search__input'),
 		search__btn = classNames('search__button btn btn--info');
 
 		return (
 			React.createElement("div", {className: search}, 
-				React.createElement(InputCandidate, {className: search__input, 
-					placeholder: this.props.placeholder, 
+				React.createElement(InputCandidate, {placeholder: this.props.placeholder, 
 					candidate: this.props.candidate, 
 					type: "text"}), 
-				React.createElement("a", {className: search__btn, value: "検索", onClick: this.handleSearch})
+				React.createElement("a", {className: search__btn, onClick: this.handleSearch}, "検索")
 			)
 		);
 	}
@@ -312,10 +315,12 @@ FluxMixin = Fluxxor.FluxMixin(React),
 StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var Main = React.createClass({displayName: "Main",
-	mixin: [FluxMixin, StoreWatchMixin('SearchStores')],
+	mixins: [FluxMixin, StoreWatchMixin('SearchStores')],
 
+	getStateFromFlux: function(){
+		return this.getFlux().store('SearchStores').getState();
+	},
 	render: function(){
-
 		var items = [
 			{url:'http://hoge1.co.jp', title:'norinori1'},
 			{url:'http://hoge2.co.jp', title:'norinori2'},
@@ -326,6 +331,7 @@ var Main = React.createClass({displayName: "Main",
 
 		var title=['項目１','項目2','項目3','項目4'];
 		var rows=[['data1-1','data1-2','data1-3','data1-4'],['data2-1','data2-2','data2-3','data2-4'],['data3-1','data3-2','data3-3','data3-4']];
+		var candidate=[];
 
 		return(
 			React.createElement("div", null, 

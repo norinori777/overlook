@@ -21,12 +21,12 @@ fsHandle        = require('fs'),
 // JSV             = require('JSV').JSV,
 
 mongoServer     = new mongodb.Server(
-        '192.168.65.5',
+        '192.168.65.7',
         27017
 ),
 
 dbHandle = new mongodb.Db(
-        'knowledge', mongoServer, {safe: true}),
+        'test', mongoServer, {safe: true}),
 
 // 作成
 constructObj = function(obj_type, obj_map, callback){

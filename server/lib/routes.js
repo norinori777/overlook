@@ -25,11 +25,18 @@ configRoutes = function(app, server){
 
 	app.get('/:obj_type/:keyword',function(req,res){
 		var regexp = new RegExp("^" + req.params.keyword),
-		filter = {test:{$regex: regexp}};
+		filter = {'test':{$regex: regexp}},
+		choice = {'_id': 0, 'test': 1};
 		crud.read(
 			req.params.obj_type,
-			filter,{},
-			function(map_list){res.json(map_list);}
+			filter, choice,
+			function(map_list){
+				var items = []
+				for(var item in map_list){
+					items.push(item.test);
+				}
+				res.json(items);
+			}
 		);
 	});
 
