@@ -31,11 +31,39 @@ configRoutes = function(app, server){
 			req.params.obj_type,
 			filter, choice,
 			function(map_list){
-				var items = []
-				for(var item in map_list){
-					items.push(item.test);
+				var items = [], i;
+				for(i=0; i < map_list.length; i++){
+					items.push(map_list[i].test);
 				}
-				res.json(items);
+				res.json({test:items});
+			}
+		);
+	});
+
+	app.get('/:obj_type/config/:table',function(req,res){
+		var filter = {req.params.table: {$ne:null}},
+		choice = {_id: 0, req.params.obj_type: 1};
+		crud.read(
+			'tableConfig',
+			filter, choice,
+			function(map_list){
+				res.json(map_list);
+			}
+		);		
+	});
+
+	app.get('/:obj_type/search/:keyword', function(req,res){
+		var config = map_list, i, regexp, filter,choice;
+		for(i=0; i < config.candidate.length; i++){
+			regexp = new RegExp(req.params.keyword);
+			filter.$or.push({config.candidate[i]: regexp});
+		}
+		choice = {};
+		crud.read(
+			req.params.obj_type,
+			filter, choice,
+			function(map_list){
+				res.json(map_list);
 			}
 		);
 	});

@@ -7,6 +7,8 @@
 
 * 利用技術
 	* react.js
+	* Flux
+		* Fluxxor
 	* gulp
 	* browserify
 	* reactify
@@ -23,7 +25,14 @@
 		* 入力ボックスとボタンをまとめたコンポーネント
 	* InputCandidate
 		* 入力ボックスに文字を入力すると、候補文字が表示するコンポーネント
+		* List
+			* <datalist>タグ配下に<option>タグの複数生成するコンポーネント
 	* SimpleTable
-		* テーブルを使用して一覧を表示する。
+		* テーブルを使用して一覧を表示
 	* main
 		* 各コンポートをまとめたメインページ
+
+* Fluxxor
+	* SearchAction.js
+	* SearchStore.js
+

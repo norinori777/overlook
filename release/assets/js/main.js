@@ -13,10 +13,10 @@ var SearchActions = {
 		ControlData('GET',
 /*					app_config.collection + '/' + data.keyword,
 */					'/test' + '/' + data.keyword,
-
 					data,
 					function(data){
-						this.dispatch(constants.GET_DATA,data);
+						var response = JSON.parse(data.response);
+						this.dispatch(constants.GET_DATA, response);
 					}.bind(self)
 		);
 	},
@@ -27,7 +27,8 @@ var SearchActions = {
 */					'/test' + '/' + data.keyword,
 					data,
 					function(data){
-						this.dispatch(constants.GET_CANDIDATE,data);
+						var candidate = JSON.parse(data.response);
+						this.dispatch(constants.GET_CANDIDATE, candidate.test);
 					}.bind(self)
 		);
 	}
@@ -141,7 +142,8 @@ FluxMixin = Fluxxor.FluxMixin(React);
 var InputCandidate = React.createClass({displayName: "InputCandidate",
 	mixins: [FluxMixin],
 	propTypes: {
-		candidate: React.PropTypes.array.isRequired
+		candidate: React.PropTypes.array.isRequired,
+		id: React.PropTypes.string.isRequired
 	},
 	getKeyWord: function(e){
 		return this.getFlux().actions.getCandidate({keyword:e.target.value});
@@ -150,8 +152,8 @@ var InputCandidate = React.createClass({displayName: "InputCandidate",
 		var search__input = classNames('search__input');
 		return(
 			React.createElement("div", null, 
-				React.createElement("input", {className: search__input, type: "text", placeholder: this.props.placeholder, onChange: this.getKeyWord}), 
-				React.createElement(List, {data: this.props.candidate})
+				React.createElement("input", {id: "search", list: this.props.id, className: search__input, type: "search", placeholder: this.props.placeholder, onChange: this.getKeyWord}), 
+				React.createElement(List, {id: this.props.id, data: this.props.candidate})
 			)
 		);
 	}
@@ -164,7 +166,8 @@ var classNames = require('classNames');
 
 var List = React.createClass({displayName: "List",
 	propTypes: {
-		data: React.PropTypes.array.isRequired
+		data: React.PropTypes.array.isRequired,
+		id: React.PropTypes.string.isRequired
 	},
 	renderItems: function(values){
 		var items = [], i;
@@ -177,7 +180,7 @@ var List = React.createClass({displayName: "List",
 	},
 	render: function(){
 		return(
-			React.createElement("datalist", null, this.renderItems(this.props.data))
+			React.createElement("datalist", {id: this.props.id}, this.renderItems(this.props.data))
 		);
 	}
 });
@@ -198,7 +201,8 @@ var Search = React.createClass({displayName: "Search",
 		candidate: React.PropTypes.array
 	},
 	handleSearch: function(e){
-		return this.getFlux().action.getData({keyword:e.target.value});
+		var value = document.getElementById('search');
+		return this.getFlux().action.getData({keyword:value});
 	},
 	render: function(){
 		var search = classNames('search'),
@@ -206,7 +210,7 @@ var Search = React.createClass({displayName: "Search",
 
 		return (
 			React.createElement("div", {className: search}, 
-				React.createElement(InputCandidate, {placeholder: this.props.placeholder, 
+				React.createElement(InputCandidate, {id: 'keywords', placeholder: this.props.placeholder, 
 					candidate: this.props.candidate, 
 					type: "text"}), 
 				React.createElement("a", {className: search__btn, onClick: this.handleSearch}, "検索")
