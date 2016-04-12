@@ -5,7 +5,10 @@ var Search = require('../develop/assets/jsx/Search.js');
 
 describe("Search",function(){
 	it('should render',function(){
-		myComponent = TestUtils.renderIntoDocument(<Search placeholder={'test'} candidate={['test1','test2']}></Search>);
+		myComponent = TestUtils.renderIntoDocument(<Search placeholder={'test'}
+							candidate={['test1','test2']}
+							targetCandidate={candidate:['server','host']}
+							targetTable={'test'}></Search>);
 
 		value = TestUtils.findRenderedDOMComponentWithTag(myComponent,'a');
 		/*expect(value.textContent).toContain('検索');*/

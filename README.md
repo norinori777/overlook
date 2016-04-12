@@ -36,3 +36,12 @@
 	* SearchAction.js
 	* SearchStore.js
 
+
+
+* data
+db.tableConfig.insert({ table: "test", "constructure" : [ { "column" : "server", "title" : "サーバ" }, { "column" : "host", "title" : "ホス ト" }, { "column" : "IP", "title" : "IPアドレス" }, { "column" : "Service", "title" : "サービス名" } ], "candidate" : [ "host", "Service" ] } )
+
+db.test.insert({server: 'test1', host: 'testhost1', IP: '192.168.11.1', Service: 'テストサービス１'})
+db.test.insert({server: 'test2', host: 'testhost2', IP: '192.168.11.2', Service: 'テストサービス２'})
+db.test.insert({server: 'test3', host: 'testhost3', IP: '192.168.11.3', Service: 'テストサービス３'})
+db.test.insert({server: 'test4', host: 'testhost4', IP: '192.168.11.4', Service: 'テストサービス４'})

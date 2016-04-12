@@ -23,26 +23,39 @@ configRoutes = function(app, server){
 		);
 	});
 
-	app.get('/:obj_type/:keyword',function(req,res){
-		var regexp = new RegExp("^" + req.params.keyword),
-		filter = {'test':{$regex: regexp}},
-		choice = {'_id': 0, 'test': 1};
+	app.get('/:obj_type/candidate/:keyword',function(req,res){
+		var filter = {table: req.params.obj_type},
+		choice = {'_id': 0, 'candidate': 1};
 		crud.read(
-			req.params.obj_type,
-			filter, choice,
+			'tableConfig',choice,
 			function(map_list){
-				var items = [], i;
-				for(i=0; i < map_list.length; i++){
-					items.push(map_list[i].test);
+				var i, filter, regexp = new RegExp("^" + req.params.keyword);
+				for(i = 0; i < map_list.length; i++){
+					var param = map_list[i].candidate;
+					filter.$or.push({param:{$regex: regexp}});
+					choice[map_list[i].candidate] = 1;
 				}
-				res.json({test:items});
+				choice['_id'] = 0;
+				crud.read(
+					req.param.obj_type,
+					filter, choice,
+					function(map_list){
+						var items = [], i;
+						for(i=0; i < map_list.length; i++){
+							for(var param in map_list[i]){
+								items.push(map_list[i][param]);
+							}
+						}
+						res.json({candidate:items});
+					}
+				);
 			}
 		);
 	});
 
 	app.get('/:obj_type/config/:table',function(req,res){
-		var filter = {req.params.table: {$ne:null}},
-		choice = {_id: 0, req.params.obj_type: 1};
+		var filter = {'table': req.params.table},
+		choice = {_id: 0, constructure: 1, candidate: 1};
 		crud.read(
 			'tableConfig',
 			filter, choice,
@@ -53,17 +66,25 @@ configRoutes = function(app, server){
 	});
 
 	app.get('/:obj_type/search/:keyword', function(req,res){
-		var config = map_list, i, regexp, filter,choice;
-		for(i=0; i < config.candidate.length; i++){
-			regexp = new RegExp(req.params.keyword);
-			filter.$or.push({config.candidate[i]: regexp});
-		}
-		choice = {};
+
+		var filter = {table: req.params.obj_type},
+		choice = {'_id': 0, 'candidate': 1};
 		crud.read(
-			req.params.obj_type,
-			filter, choice,
+			'tableConfig',choice,
 			function(map_list){
-				res.json(map_list);
+				var i, filter, choice = {};
+				var regexp = new RegExp("^" + req.params.keyword);
+				for(i = 0; i < map_list.length; i++){
+					var param = map_list[i].candidate;
+					filter.$or.push({param:{$regex: regexp}});
+				}
+				crud.read(
+					req.param.obj_type,
+					filter, choice,
+					function(map_list){
+						res.json({data:map_list});
+					}
+				);
 			}
 		);
 	});

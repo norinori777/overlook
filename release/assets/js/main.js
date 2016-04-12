@@ -3,16 +3,27 @@ var ControlData = require('./util/ControlData');
 var app_config = require('../js/config.js');
 
 var constants = {
+	GET_CONFIG: "GET_CONFIG",
 	GET_DATA: "GET_DATA",
 	GET_CANDIDATE: "GET_CANDIDATE"
 };
 
 var SearchActions = {
-	getData: function(data){
+	getConfig: function(data){
 		var self = this;
 		ControlData('GET',
-/*					app_config.collection + '/' + data.keyword,
-*/					'/test' + '/' + data.keyword,
+			'/tableConfig' + '/config/' + data.table,
+			data,
+			function(data){
+				var response = JSON.parse(data.response);
+				this.dispatch(constants.GET_CONFIG, response);
+			}.bind(self)
+		 )
+	},
+	getData: function(data, table){
+		var self = this;
+		ControlData('GET',
+					'/' + table + '/' + 'search' + '/' + data.keyword,
 					data,
 					function(data){
 						var response = JSON.parse(data.response);
@@ -20,15 +31,14 @@ var SearchActions = {
 					}.bind(self)
 		);
 	},
-	getCandidate: function(data){
+	getCandidate: function(data, table){
 		var self = this;
 		ControlData('GET',
-/*					app_config.collection + '/' + data.keyword,
-*/					'/test' + '/' + data.keyword,
+					'/' + table + '/' + 'candidate' + '/' + data.keyword,
 					data,
 					function(data){
-						var candidate = JSON.parse(data.response);
-						this.dispatch(constants.GET_CANDIDATE, candidate.test);
+						var res = JSON.parse(data.response);
+						this.dispatch(constants.GET_CANDIDATE, res.candidate);
 					}.bind(self)
 		);
 	}
@@ -40,6 +50,7 @@ module.exports = SearchActions;
 var Fluxxor = require('fluxxor');
 
 var constants = {
+	GET_CONFIG: "GET_CONFIG",
 	GET_DATA: "GET_DATA",
 	GET_CANDIDATE: "GET_CANDIDATE"
 };
@@ -48,13 +59,22 @@ var SearchStores = Fluxxor.createStore({
 	initialize: function(){
 		this.data = [];
 		this.candidate = [];
+		this.tableConfig = [];
+		this.candidateConfig = [];
 
 		this.bindActions(
+			constants.GET_CONFIG, this.onGetConfig,
 			constants.GET_DATA,	this.onGetData,
 			constants.GET_CANDIDATE, this.onGetCandidate
 		);
 	},
+	onGetConfig: function(payload){
+		this.tableConfig = payload.constructure;
+		this.candidateConfig = payload.candidate;
+
+	},
 	onGetData: function(payload){
+		this.config = payload.test.constructure;
 		this.data = payload;
 		this.emit('change');
 	},
@@ -65,7 +85,9 @@ var SearchStores = Fluxxor.createStore({
 	getState: function(){
 		return {
 			data: this.data,
-			candidate: this.candidate
+			candidate: this.candidate,
+			tableConfig: this.tableConfig,
+			candidateConfig: this.candidateConfig
 		}
 	}
 });
@@ -143,10 +165,12 @@ var InputCandidate = React.createClass({displayName: "InputCandidate",
 	mixins: [FluxMixin],
 	propTypes: {
 		candidate: React.PropTypes.array.isRequired,
-		id: React.PropTypes.string.isRequired
+		id: React.PropTypes.string.isRequired,
+		targetTable: React.PropTypes.string.isRequired,
+		targetCandidate: React.PropTypes.array.isRequired
 	},
 	getKeyWord: function(e){
-		return this.getFlux().actions.getCandidate({keyword:e.target.value});
+		return this.getFlux().actions.getCandidate({keyword:e.target.value, table:this.props.targetTable, });
 	},
 	render: function(){
 		var search__input = classNames('search__input');
@@ -198,11 +222,13 @@ var Search = React.createClass({displayName: "Search",
 	mixins: [FluxMixin],
 	propTypes: {
 		placeholder: React.PropTypes.string.isRequired,
-		candidate: React.PropTypes.array
+		candidate: React.PropTypes.array,
+		targetCandidate: React.PropTypes.array.isRequired,
+		targetTable: React.PropTypes.string.isRequired
 	},
 	handleSearch: function(e){
 		var value = document.getElementById('search');
-		return this.getFlux().action.getData({keyword:value});
+		return this.getFlux().actions.getData({keyword:value, table: this.props.targetTable});
 	},
 	render: function(){
 		var search = classNames('search'),
@@ -212,6 +238,8 @@ var Search = React.createClass({displayName: "Search",
 			React.createElement("div", {className: search}, 
 				React.createElement(InputCandidate, {id: 'keywords', placeholder: this.props.placeholder, 
 					candidate: this.props.candidate, 
+					targetTable: this.props.targetTable, 
+					targetCandidate: this.props.targetCandidate, 
 					type: "text"}), 
 				React.createElement("a", {className: search__btn, onClick: this.handleSearch}, "検索")
 			)
@@ -262,22 +290,28 @@ var SimpleTable = React.createClass({displayName: "SimpleTable",
 		}
 		return head;
 	},
-	renderBody: function(values){
+	renderBody: function(values, config){
 		var body = [], i;
 
 		for(i = 0; i < values.length; i++){
-			body.push(React.createElement("tr", null, this.renderRow(values[i],i)));
+			body.push(React.createElement("tr", null, this.renderRow(values[i], i, config)));
 		}
 		return body;
 	},
-	renderRow: function(values, num){
-		var row = [], i;
+	renderRow: function(values, num, config){
+		var row = [], i, j;
 		
 		if(this.props.isSetNum){
 			row.push(React.createElement("th", null, num+1));
 		}
 		for(i = 0; i < values.length; i++){
-			row.push(React.createElement("td", null, values[i]));
+			for(j = 0; j < config.length; j++){
+				if(values[i][config[j]] == undefined){
+					row.push(React.createElement("td", null, '－'));
+				} else {
+					row.push(React.createElement("td", null, values[i][config[j]]));
+				}
+			}
 		}
 		return row;
 	},
@@ -294,7 +328,7 @@ var SimpleTable = React.createClass({displayName: "SimpleTable",
 					)
 				), 
 				React.createElement("tbody", {className: body}, 
-					this.renderBody(this.props.rows)
+					this.renderBody(this.props.rows, this.props.columns)
 				)
 			)
 		);
@@ -324,6 +358,24 @@ var Main = React.createClass({displayName: "Main",
 	getStateFromFlux: function(){
 		return this.getFlux().store('SearchStores').getState();
 	},
+	componentWillMount: function(){
+		return this.getFlux().actions.getConfig({table:'test'});
+	},
+	makeTitles: function(config){
+		var titles = [], i;
+
+		for(i = 0; i < config.length; i++){
+			titles.push(config[i].title);
+		}
+		return titles;
+	},
+	makeColumns: function(config){
+		var columns = [], i;
+		for(i = 0; i < config.length; i++){
+			columns.push(config[i].column);
+		}
+		return columns;
+	},
 	render: function(){
 		var items = [
 			{url:'http://hoge1.co.jp', title:'norinori1'},
@@ -333,18 +385,22 @@ var Main = React.createClass({displayName: "Main",
 			{url:'http://hoge5.co.jp', title:'norinori5'}
 		]; 
 
-		var title=['項目１','項目2','項目3','項目4'];
+/*		var title=['項目１','項目2','項目3','項目4'];
 		var rows=[['data1-1','data1-2','data1-3','data1-4'],['data2-1','data2-2','data2-3','data2-4'],['data3-1','data3-2','data3-3','data3-4']];
-		var candidate=[];
-
+*/
 		return(
 			React.createElement("div", null, 
 				React.createElement(SimpleHeader, {title: 'NEW TEST SITE'}), 
 				React.createElement(HorizaontalMenu, {items: items}), 
 				React.createElement("br", null), 
-				React.createElement(Search, {placeholder: 'サービス名、または、ホスト名を入力', candidate: this.state.candidate}), 
+				React.createElement(Search, {placeholder: 'サービス名、または、ホスト名を入力', 
+						candidate: this.state.candidate, 
+						targetCandidate: this.state.candidateConfig, 
+						targetTable: this.state.tableConfig.table}), 
 				React.createElement("br", null), 
-				React.createElement(SimpleTable, {title: title, rows: rows, isSetNum: true})
+				React.createElement(SimpleTable, {title: this.makeTitles(this.state.tableConfig), 
+						columns: this.makeColumns(this.state.tableConfig), 
+						rows: this.state.data, isSetNum: true})
 			)
 		);
 	}	
