@@ -27,7 +27,7 @@ configRoutes = function(app, server){
 		var filter = {table: req.params.obj_type},
 		choice = {'_id': 0, 'candidate': 1};
 		crud.read(
-			'tableConfig',choice,
+			'tableConfig' ,choice,
 			function(map_list){
 				var i, filter, regexp = new RegExp("^" + req.params.keyword);
 				for(i = 0; i < map_list.length; i++){
@@ -55,7 +55,7 @@ configRoutes = function(app, server){
 
 	app.get('/:obj_type/config/:table',function(req,res){
 		var filter = {'table': req.params.table},
-		choice = {_id: 0, constructure: 1, candidate: 1};
+		choice = {_id: 0, table: 1, constructure: 1, candidate: 1};
 		crud.read(
 			'tableConfig',
 			filter, choice,

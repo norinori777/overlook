@@ -13,6 +13,7 @@ var SearchActions = {
 		var self = this;
 		ControlData('GET',
 			'/tableConfig' + '/config/' + data.table,
+			false,
 			data,
 			function(data){
 				var response = JSON.parse(data.response);
@@ -25,6 +26,7 @@ var SearchActions = {
 		ControlData('GET',
 					'/' + table + '/' + 'search' + '/' + data.keyword,
 					data,
+					true,
 					function(data){
 						var response = JSON.parse(data.response);
 						this.dispatch(constants.GET_DATA, response);
@@ -36,6 +38,7 @@ var SearchActions = {
 		ControlData('GET',
 					'/' + table + '/' + 'candidate' + '/' + data.keyword,
 					data,
+					true,
 					function(data){
 						var res = JSON.parse(data.response);
 						this.dispatch(constants.GET_CANDIDATE, res.candidate);
@@ -59,7 +62,8 @@ var SearchStores = Fluxxor.createStore({
 	initialize: function(){
 		this.data = [];
 		this.candidate = [];
-		this.tableConfig = [];
+		this.columnsConfig = [];
+		this.table = '';
 		this.candidateConfig = [];
 
 		this.bindActions(
@@ -69,9 +73,10 @@ var SearchStores = Fluxxor.createStore({
 		);
 	},
 	onGetConfig: function(payload){
-		this.tableConfig = payload.constructure;
-		this.candidateConfig = payload.candidate;
-
+		this.columnsConfig = payload[0].constructure;
+		this.candidateConfig = payload[0].candidate;
+		this.table = payload[0].table;
+		this.emit('change');
 	},
 	onGetData: function(payload){
 		this.config = payload.test.constructure;
@@ -86,8 +91,9 @@ var SearchStores = Fluxxor.createStore({
 		return {
 			data: this.data,
 			candidate: this.candidate,
-			tableConfig: this.tableConfig,
-			candidateConfig: this.candidateConfig
+			columnsConfig: this.columnsConfig,
+			candidateConfig: this.candidateConfig,
+			table: this.table
 		}
 	}
 });
@@ -106,11 +112,12 @@ module_exports = app_config;
 },{}],4:[function(require,module,exports){
 
 var ControlData = function(method, 
-							url, 
+							url,
+							async, 
 							data, 
 							callback){
 	var request = new XMLHttpRequest();
-	request.open(method, url);
+	request.open(method, url, async);
 	request.onreadystatechange = function(){
 		if(request.readyState === 4 
 			&& request.status === 200 
@@ -170,7 +177,7 @@ var InputCandidate = React.createClass({displayName: "InputCandidate",
 		targetCandidate: React.PropTypes.array.isRequired
 	},
 	getKeyWord: function(e){
-		return this.getFlux().actions.getCandidate({keyword:e.target.value, table:this.props.targetTable, });
+		return this.getFlux().actions.getCandidate({keyword:e.target.value, table:this.props.targetTable});
 	},
 	render: function(){
 		var search__input = classNames('search__input');
@@ -356,10 +363,8 @@ var Main = React.createClass({displayName: "Main",
 	mixins: [FluxMixin, StoreWatchMixin('SearchStores')],
 
 	getStateFromFlux: function(){
+		this.getFlux().actions.getConfig({table:'test'});
 		return this.getFlux().store('SearchStores').getState();
-	},
-	componentWillMount: function(){
-		return this.getFlux().actions.getConfig({table:'test'});
 	},
 	makeTitles: function(config){
 		var titles = [], i;
@@ -396,10 +401,10 @@ var Main = React.createClass({displayName: "Main",
 				React.createElement(Search, {placeholder: 'サービス名、または、ホスト名を入力', 
 						candidate: this.state.candidate, 
 						targetCandidate: this.state.candidateConfig, 
-						targetTable: this.state.tableConfig.table}), 
+						targetTable: this.state.table}), 
 				React.createElement("br", null), 
-				React.createElement(SimpleTable, {title: this.makeTitles(this.state.tableConfig), 
-						columns: this.makeColumns(this.state.tableConfig), 
+				React.createElement(SimpleTable, {title: this.makeTitles(this.state.columnsConfig), 
+						columns: this.makeColumns(this.state.columnsConfig), 
 						rows: this.state.data, isSetNum: true})
 			)
 		);
