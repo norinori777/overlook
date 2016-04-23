@@ -73,7 +73,7 @@ var SearchStores = Fluxxor.createStore({
 		this.data = [];
 		this.candidate = [];
 		this.columnsConfig = [];
-		this.table = '';
+		this.table = 'test';
 		this.candidateConfig = [];
 		this.modal = 0;
 
@@ -310,10 +310,10 @@ var SimpleModal = React.createClass({displayName: "SimpleModal",
 		data: React.PropTypes.object.isRequired,
 		title: React.PropTypes.array.isRequired,
 	},
-	renderContents: function(tities, rows, names, num){
+	renderContents: function(titles, rows, names, num){
 		var items = [], i, j,
 		title = classNames('simple-modal__title'),
-		body = classNames('simple-modal__body');
+		body = classNames('simple-modal__content');
 
 		for(i = 0; i < rows.length; i++){
 			if(i+1 === num){
@@ -323,27 +323,35 @@ var SimpleModal = React.createClass({displayName: "SimpleModal",
 				}				
 			}
 		}
+		return items;
 	},
 	closeModal: function(){
 		return this.getFlux().actions.closedModal();
 	},
 	render: function(){
 		var 
-		Modal = classNames('simple-modal'),
-		header = classNames('simple-modal__head'),
-		body = classNames('simple-modal__body'),
-		footer = classNames('simple-modal-footer');
+		showModal = this.props.number === 0 ? false : true,
+		hideModal = this.props.number === 0 ? true : false,
+		showBackdrop 
+		Modal = classNames('simple-modal', 'fade', {'in': showModal}),
+		header = classNames({'simple-modal__head': showModal}),
+		body = classNames({'simple-modal__body': showModal}),
+		footer = classNames({'simple-modal__footer': showModal}),
+		backdrop = classNames('simple-modal__backdrop', 'fade', {'in': showModal});
 
 		return (
-			React.createElement("div", {className: Modal}, 
-				React.createElement("div", {className: header}), 
-				React.createElement("div", {className: body}, this.renderContents(this.props.titles,
-																this.props.rows,
-																this.props.columnNames,
-																this.props.number)), 
-				React.createElement("div", {className: footer}, 
-					React.createElement("a", {onClick: this.closeModal}, "閉じる")
-				)
+			React.createElement("div", null, 
+				React.createElement("div", {className: Modal}, 
+					React.createElement("div", {className: header}), 
+					React.createElement("div", {className: body}, this.renderContents(this.props.titles,
+																	this.props.rows,
+																	this.props.columnNames,
+																	this.props.number)), 
+					React.createElement("div", {className: footer}, 
+						React.createElement("a", {onClick: this.closeModal}, "閉じる")
+					)
+				), 
+				React.createElement("div", {className: backdrop, onClick: this.closeModal})
 			)
 		);
 	}
@@ -367,8 +375,8 @@ var SimpleTable = React.createClass({displayName: "SimpleTable",
 		rows: React.PropTypes.array.isRequired,
 		isSetNum: React.PropTypes.bool.isRequired
 	},
-	handleModal: function(i){
-		return this.getFlux().actions.showModal(i);
+	handleModal: function(e){
+		return this.getFlux().actions.showModal(e.target.parentNode.rowIndex);
 	},
 	renderModal: function(titles, rows, columnNames, num){
 		var modal = [];
@@ -394,7 +402,7 @@ var SimpleTable = React.createClass({displayName: "SimpleTable",
 		var body = [], i, record = classNames('simple-table__record');;
 
 		for(i = 0; i < values.length; i++){
-			body.push(React.createElement("tr", {className: record, onClick: this.handleModal({i})}, this.renderRow(values[i], i, config)));
+			body.push(React.createElement("tr", {className: record, onClick: this.handleModal}, this.renderRow(values[i], i, config)));
 		}
 		return body;
 	},
@@ -414,7 +422,9 @@ var SimpleTable = React.createClass({displayName: "SimpleTable",
 		return row;
 	},
 	render: function(){
-		var table = classNames('simple-table table--responsive'),
+		var
+		isHide = this.props.rows.length === 0 ? true : false, 
+		table = classNames('simple-table',{'simple-table--hide': isHide}, 'table--responsive'),
 		head = classNames('simple-table__head'),
 		body = classNames('simple-table__body');
 
@@ -458,10 +468,16 @@ StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var Main = React.createClass({displayName: "Main",
 	mixins: [FluxMixin, StoreWatchMixin('SearchStores')],
+	getInitialState: function(){
+		
+	},
 	componentWillMount: function(){
+		
+	},
+	componentDidMount: function(){
+		this.getFlux().actions.getConfig({table:'test'});
 	},
 	getStateFromFlux: function(){
-		this.getFlux().actions.getConfig({table:'test'});
 		return this.getFlux().store('SearchStores').getState();
 	},
 	makeTitles: function(config){

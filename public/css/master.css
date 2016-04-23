@@ -530,6 +530,8 @@ h2 {
     padding: 12px;
     padding: 0.75rem;
     vertical-align: top; }
+  .simple-table.simple-table--hide {
+    display: none; }
   .simple-table .simple-table {
     background-color: #fff; }
   .simple-table .simple-table__head th {
@@ -611,3 +613,79 @@ h2 {
   display: block;
   min-height: .01%;
   overflow-x: auto; }
+
+.simple-modal {
+  overflow: hidden;
+  width: 50%;
+  position: fixed;
+  top: 20%;
+  left: 30%;
+  z-index: 1050;
+  -webkit-overflow-scrolling: touch;
+  background-color: #fff;
+  border: 1px solid #999;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  　　box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  background-clip: padding-box;
+  outline: 0;
+  outline: 0; }
+  .simple-modal.fade {
+    display: none;
+    -webkit-transform: translate(0, -25%);
+    transform: translate(0, -25%);
+    -webkit-transition: -webkit-transform 0.3s ease-out;
+    transition: transform 0.3s ease-out; }
+  .simple-modal.in {
+    display: block;
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0); }
+
+.modal-open .modal {
+  overflow-x: hidden;
+  overflow-y: auto; }
+
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 10px; }
+
+.simple-modal-content {
+  position: relative;
+  background-color: #fff;
+  border: 1px solid #999;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  　　box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  background-clip: padding-box;
+  outline: 0; }
+
+.simple-modal__backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  background-color: #000; }
+  .simple-modal__backdrop.fade {
+    display: none;
+    opacity: 0;
+    filter: alpha(opacity=0); }
+  .simple-modal__backdrop.in {
+    display: block;
+    opacity: 0.5;
+    filter: alpha(opacity=50); }
+
+.simple-modal__header {
+  padding: 15px;
+  border-bottom: 1px solid #e5e5e5;
+  *zoom: 1; }
+  .simple-modal__header:after {
+    content: "";
+    display: table;
+    clear: both; }
+
+.simple-modal__body {
+  position: relative;
+  padding: 15px; }
