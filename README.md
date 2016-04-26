@@ -29,6 +29,8 @@
 			* <datalist>タグ配下に<option>タグの複数生成するコンポーネント
 	* SimpleTable
 		* テーブルを使用して一覧を表示
+	* SimpleModal
+		* モーダルを表示、今回の構成としては、テーブルのレコードをクリック時にレコード内容を表示したモーダルを表示するようにした。
 	* main
 		* 各コンポートをまとめたメインページ
 
@@ -39,7 +41,7 @@
 
 
 * data
-db.tableConfig.insert({ table: "test", "constructure" : [ { "column" : "server", "title" : "サーバ" }, { "column" : "host", "title" : "ホス ト" }, { "column" : "IP", "title" : "IPアドレス" }, { "column" : "Service", "title" : "サービス名" } ], "candidate" : [ "host", "Service" ] } )
+db.tableConfig.insert({ table: "test", "constructure" : [ { "column" : "server", "title" : "サーバ" }, { "column" : "host", "title" : "ホス ト" }, { "column" : "IP", "title" : "IPアドレス" }, { "column" : "Service", "title" : "サービス名" } ], "candidate" : [ "host", "Service" ], "placeholder": "キーワードを入力してください"} )
 
 db.test.insert({server: 'test1', host: 'testhost1', IP: '192.168.11.1', Service: 'テストサービス１'})
 db.test.insert({server: 'test2', host: 'testhost2', IP: '192.168.11.2', Service: 'テストサービス２'})

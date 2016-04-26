@@ -73,6 +73,7 @@ var SearchStores = Fluxxor.createStore({
 		this.data = [];
 		this.candidate = [];
 		this.columnsConfig = [];
+		this.placeholder = '';
 		this.table = 'test';
 		this.candidateConfig = [];
 		this.modal = 0;
@@ -88,6 +89,7 @@ var SearchStores = Fluxxor.createStore({
 	onGetConfig: function(payload){
 		this.columnsConfig = payload[0].constructure;
 		this.candidateConfig = payload[0].candidate;
+		this.placeholder = payload[0].placeholder;
 		this.table = payload[0].table;
 		this.emit('change');
 	},
@@ -255,8 +257,8 @@ var Search = React.createClass({displayName: "Search",
 		targetTable: React.PropTypes.string.isRequired
 	},
 	handleSearch: function(e){
-		var value = document.getElementById('search');
-		return this.getFlux().actions.getData({keyword:value, table: this.props.targetTable});
+		var target = document.getElementById('search');
+		return this.getFlux().actions.getData({keyword:target.value, table: this.props.targetTable});
 	},
 	render: function(){
 		var search = classNames('search'),
@@ -332,23 +334,23 @@ var SimpleModal = React.createClass({displayName: "SimpleModal",
 		var 
 		showModal = this.props.number === 0 ? false : true,
 		hideModal = this.props.number === 0 ? true : false,
-		showBackdrop 
 		Modal = classNames('simple-modal', 'fade', {'in': showModal}),
-		header = classNames({'simple-modal__head': showModal}),
+		header = classNames({'simple-modal__header': showModal}),
 		body = classNames({'simple-modal__body': showModal}),
 		footer = classNames({'simple-modal__footer': showModal}),
+		button = classNames('btn', 'btn--info'),
 		backdrop = classNames('simple-modal__backdrop', 'fade', {'in': showModal});
 
 		return (
 			React.createElement("div", null, 
 				React.createElement("div", {className: Modal}, 
-					React.createElement("div", {className: header}), 
+					React.createElement("div", {className: header}, "Detail"), 
 					React.createElement("div", {className: body}, this.renderContents(this.props.titles,
 																	this.props.rows,
 																	this.props.columnNames,
 																	this.props.number)), 
 					React.createElement("div", {className: footer}, 
-						React.createElement("a", {onClick: this.closeModal}, "閉じる")
+						React.createElement("a", {className: button, onClick: this.closeModal}, "閉じる")
 					)
 				), 
 				React.createElement("div", {className: backdrop, onClick: this.closeModal})
@@ -475,7 +477,7 @@ var Main = React.createClass({displayName: "Main",
 		
 	},
 	componentDidMount: function(){
-		this.getFlux().actions.getConfig({table:'test'});
+		this.getFlux().actions.getConfig({table:this.state.table});
 	},
 	getStateFromFlux: function(){
 		return this.getFlux().store('SearchStores').getState();
@@ -509,7 +511,7 @@ var Main = React.createClass({displayName: "Main",
 				React.createElement(SimpleHeader, {title: 'NEW TEST SITE'}), 
 				React.createElement(HorizaontalMenu, {items: items}), 
 				React.createElement("br", null), 
-				React.createElement(Search, {placeholder: 'サービス名、または、ホスト名を入力', 
+				React.createElement(Search, {placeholder: this.state.placeholder, 
 						candidate: this.state.candidate, 
 						targetCandidate: this.state.candidateConfig, 
 						targetTable: this.state.table}), 
