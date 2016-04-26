@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 検索結果表示サイト（テーブル表示）
 
 * 機能
@@ -48,14 +47,4 @@ db.test.insert({server: 'test1', host: 'testhost1', IP: '192.168.11.1', Service:
 db.test.insert({server: 'test2', host: 'testhost2', IP: '192.168.11.2', Service: 'テストサービス２'})
 db.test.insert({server: 'test3', host: 'testhost3', IP: '192.168.11.3', Service: 'テストサービス３'})
 db.test.insert({server: 'test4', host: 'testhost4', IP: '192.168.11.4', Service: 'テストサービス４'})
-=======
-# overlook
 
-## コンポーネント
-
-### SimpleHeader.js
-- センターに文字を表示するシンプルなヘッダー
-
-### static_top.js
-- [{url:,title},{},{}]をPropsで受け渡すと、リンクを横並びい表示メニューする。
->>>>>>> origin/master
