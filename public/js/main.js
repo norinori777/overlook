@@ -73,6 +73,7 @@ var SearchStores = Fluxxor.createStore({
 		this.data = [];
 		this.candidate = [];
 		this.columnsConfig = [];
+		this.placeholder = '';
 		this.table = 'test';
 		this.candidateConfig = [];
 		this.modal = 0;
@@ -88,6 +89,7 @@ var SearchStores = Fluxxor.createStore({
 	onGetConfig: function(payload){
 		this.columnsConfig = payload[0].constructure;
 		this.candidateConfig = payload[0].candidate;
+		this.placeholder = payload[0].placeholder;
 		this.table = payload[0].table;
 		this.emit('change');
 	},
@@ -509,7 +511,7 @@ var Main = React.createClass({displayName: "Main",
 				React.createElement(SimpleHeader, {title: 'NEW TEST SITE'}), 
 				React.createElement(HorizaontalMenu, {items: items}), 
 				React.createElement("br", null), 
-				React.createElement(Search, {placeholder: 'サービス名、または、ホスト名を入力', 
+				React.createElement(Search, {placeholder: this.state.placeholder, 
 						candidate: this.state.candidate, 
 						targetCandidate: this.state.candidateConfig, 
 						targetTable: this.state.table}), 

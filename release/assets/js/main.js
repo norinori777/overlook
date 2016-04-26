@@ -115,6 +115,7 @@ var SearchStores = Fluxxor.createStore({
 			candidate: this.candidate,
 			columnsConfig: this.columnsConfig,
 			candidateConfig: this.candidateConfig,
+			placeholder: this.placeholder,
 			table: this.table,
 			modal: this.modal
 		}
@@ -156,12 +157,20 @@ module.exports = ControlData;
 
 
 },{}],5:[function(require,module,exports){
-var React = require('react');
-var classNames = require('classnames');
+var
+React = require('react'),
+classNames = require('classnames'),
+Fluxxor = require('fluxxor'),
+FluxMixin = Fluxxor.FluxMixin(React);
 
 var HorizontalMenu = React.createClass({displayName: "HorizontalMenu",
+	mixins: [FluxMixin],
 	propTypes: {
-		items: React.PropTypes.array.isRequired
+		items: React.PropTypes.array.isRequired,
+		table: React.PropTypes.string.isRequired
+	},
+	handleMenu: function(){
+		return this.getFlux().actions.handleMenu();
 	},
 	renderItems: function(values){
 		var items = [], i;
@@ -184,7 +193,7 @@ var HorizontalMenu = React.createClass({displayName: "HorizontalMenu",
 module.exports = HorizontalMenu;
 
 
-},{"classnames":15,"react":269}],6:[function(require,module,exports){
+},{"classnames":15,"fluxxor":16,"react":269}],6:[function(require,module,exports){
 var React = require('react'),
 classNames = require('classNames'),
 List = require('./List.js'),
