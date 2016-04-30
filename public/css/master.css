@@ -230,13 +230,13 @@ h2 {
   float: left;
   width: auto;
   text-align: center; }
-  .horizontalMenu .horizontalMenu__item > a {
+  .horizontalMenu .horizontalMenu__item > li {
     display: block;
     padding: 5px;
     color: #000000;
     text-decoration: none; }
-    .horizontalMenu .horizontalMenu__item > a:hover {
-      color: #29aabf; }
+  .horizontalMenu .horizontalMenu__item:hover {
+    color: #29aabf; }
 
 .horizontalMenu .horizontalMenu--2 {
   width: 48%; }

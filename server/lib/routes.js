@@ -62,7 +62,7 @@ configRoutes = function(app, server){
 
 	app.get('/:obj_type/config/:table',function(req,res){
 		var filter = {'table': req.params.table},
-		choice = {_id: 0, table: 1, constructure: 1, candidate: 1, placeholder: 1};
+		choice = {_id: 0, table: 1, constructure: 1, candidate: 1, placeholder: 1, title: 1};
 		crud.read(
 			'tableConfig',
 			filter, choice,

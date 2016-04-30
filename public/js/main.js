@@ -4,6 +4,7 @@ var app_config = require('../js/config.js');
 
 var constants = {
 	GET_CONFIG: "GET_CONFIG",
+	REGET_CONFIG: 'REGET_CONFIG',
 	GET_DATA: "GET_DATA",
 	GET_CANDIDATE: "GET_CANDIDATE",
 	SHOW_MODAL: "SHOW_MODAL",
@@ -20,6 +21,18 @@ var SearchActions = {
 			function(data){
 				var response = JSON.parse(data.response);
 				this.dispatch(constants.GET_CONFIG, response);
+			}.bind(self)
+		 )
+	},
+	reGetConfig: function(data){
+		var self = this;
+		ControlData('GET',
+			'/tableConfig' + '/config/' + data.table,
+			false,
+			data,
+			function(data){
+				var response = JSON.parse(data.response);
+				this.dispatch(constants.REGET_CONFIG, response);
 			}.bind(self)
 		 )
 	},
@@ -41,9 +54,9 @@ var SearchActions = {
 					'/' + data.table + '/' + 'candidate' + '/' + data.keyword,
 					data,
 					true,
-					function(data){
-						var res = JSON.parse(data.response);
-						this.dispatch(constants.GET_CANDIDATE, res.candidate);
+					function(inlineData){
+						var res = JSON.parse(inlineData.response);
+						this.dispatch(constants.GET_CANDIDATE, {candidate: res.candidate, keyword:data.keyword});
 					}.bind(self)
 		);
 	},
@@ -62,6 +75,7 @@ var Fluxxor = require('fluxxor');
 
 var constants = {
 	GET_CONFIG: "GET_CONFIG",
+	REGET_CONFIG: "REGET_CONFIG",
 	GET_DATA: "GET_DATA",
 	GET_CANDIDATE: "GET_CANDIDATE",
 	SHOW_MODAL: "SHOW_MODAL",
@@ -71,15 +85,24 @@ var constants = {
 var SearchStores = Fluxxor.createStore({
 	initialize: function(){
 		this.data = [];
+		this.title = '';
 		this.candidate = [];
 		this.columnsConfig = [];
 		this.placeholder = '';
 		this.table = 'test';
 		this.candidateConfig = [];
+		this.keyword = '';
 		this.modal = 0;
+		this.menu = [
+			{table: 'test', title: 'norinori1'},
+			{table: 'test2', title: 'norinori2'},
+			{table: 'test3', title: 'norinori3'},
+			{table: 'test4', title: 'norinori4'},
+		];
 
 		this.bindActions(
 			constants.GET_CONFIG, this.onGetConfig,
+			constants.REGET_CONFIG, this.onReGetConfig,
 			constants.GET_DATA,	this.onGetData,
 			constants.GET_CANDIDATE, this.onGetCandidate,
 			constants.SHOW_MODAL, this.onShowModal,
@@ -87,10 +110,23 @@ var SearchStores = Fluxxor.createStore({
 		);
 	},
 	onGetConfig: function(payload){
+		this.title = payload[0].title;
 		this.columnsConfig = payload[0].constructure;
 		this.candidateConfig = payload[0].candidate;
 		this.placeholder = payload[0].placeholder;
 		this.table = payload[0].table;
+		this.emit('change');
+	},
+	onReGetConfig: function(payload){
+		this.data = [];
+		this.title = payload[0].title;
+		this.keyword = '';
+		this.candidate = [];
+		this.columnsConfig = payload[0].constructure;
+		this.candidateConfig = payload[0].candidate;
+		this.placeholder = payload[0].placeholder;
+		this.table = payload[0].table;
+		this.modal = 0;
 		this.emit('change');
 	},
 	onGetData: function(payload){
@@ -98,7 +134,8 @@ var SearchStores = Fluxxor.createStore({
 		this.emit('change');
 	},
 	onGetCandidate: function(payload){
-		this.candidate = payload;
+		this.candidate = payload.candidate;
+		this.keyword = payload.keyword;
 		this.emit('change');
 	},
 	onShowModal: function(payload){
@@ -112,12 +149,15 @@ var SearchStores = Fluxxor.createStore({
 	getState: function(){
 		return {
 			data: this.data,
+			title: this.title,
+			keyword: this.keyword,
 			candidate: this.candidate,
 			columnsConfig: this.columnsConfig,
 			candidateConfig: this.candidateConfig,
 			placeholder: this.placeholder,
 			table: this.table,
-			modal: this.modal
+			modal: this.modal,
+			menu: this.menu
 		}
 	}
 });
@@ -169,8 +209,9 @@ var HorizontalMenu = React.createClass({displayName: "HorizontalMenu",
 		items: React.PropTypes.array.isRequired,
 		table: React.PropTypes.string.isRequired
 	},
-	handleMenu: function(){
-		return this.getFlux().actions.handleMenu();
+	changeMenu: function(e){
+		var value = e.target.getAttribute('value');
+		return this.getFlux().actions.reGetConfig({table:value});
 	},
 	renderItems: function(values){
 		var items = [], i;
@@ -178,7 +219,7 @@ var HorizontalMenu = React.createClass({displayName: "HorizontalMenu",
 		var css_item = classNames('horizontalMenu__item', 'horizontalMenu--'+num);
 
 		for(i = 0; i < values.length; i++){
-			items.push(React.createElement("li", {className: css_item}, React.createElement("a", {href: values[i].url}, values[i].title)));
+			items.push(React.createElement("li", {className: css_item, onClick: this.changeMenu, value: values[i].table}, values[i].title));
 		}
 		return items;
 	},
@@ -206,7 +247,8 @@ var InputCandidate = React.createClass({displayName: "InputCandidate",
 		candidate: React.PropTypes.array.isRequired,
 		id: React.PropTypes.string.isRequired,
 		targetTable: React.PropTypes.string.isRequired,
-		targetCandidate: React.PropTypes.array.isRequired
+		targetCandidate: React.PropTypes.array.isRequired,
+		keyword: React.PropTypes.string.isRequired
 	},
 	getKeyWord: function(e){
 		return this.getFlux().actions.getCandidate({keyword:e.target.value, table:this.props.targetTable});
@@ -215,7 +257,11 @@ var InputCandidate = React.createClass({displayName: "InputCandidate",
 		var search__input = classNames('search__input');
 		return(
 			React.createElement("div", null, 
-				React.createElement("input", {id: "search", list: this.props.id, className: search__input, type: "search", placeholder: this.props.placeholder, onChange: this.getKeyWord}), 
+				React.createElement("input", {id: "search", list: this.props.id, 
+						className: search__input, 
+						type: "search", 
+						placeholder: this.props.placeholder, 
+						onChange: this.getKeyWord}), 
 				React.createElement(List, {id: this.props.id, data: this.props.candidate})
 			)
 		);
@@ -263,7 +309,8 @@ var Search = React.createClass({displayName: "Search",
 		placeholder: React.PropTypes.string.isRequired,
 		candidate: React.PropTypes.array,
 		targetCandidate: React.PropTypes.array.isRequired,
-		targetTable: React.PropTypes.string.isRequired
+		targetTable: React.PropTypes.string.isRequired,
+		keyword: React.PropTypes.string.isRequired
 	},
 	handleSearch: function(e){
 		var target = document.getElementById('search');
@@ -507,23 +554,17 @@ var Main = React.createClass({displayName: "Main",
 		return columns;
 	},
 	render: function(){
-		var items = [
-			{url:'http://hoge1.co.jp', title:'norinori1'},
-			{url:'http://hoge2.co.jp', title:'norinori2'},
-			{url:'http://hoge3.co.jp', title:'norinori3'},
-			{url:'http://hoge4.co.jp', title:'norinori4'},
-			{url:'http://hoge5.co.jp', title:'norinori5'}
-		]; 
 
 		return(
 			React.createElement("div", null, 
-				React.createElement(SimpleHeader, {title: 'NEW TEST SITE'}), 
-				React.createElement(HorizaontalMenu, {items: items}), 
+				React.createElement(SimpleHeader, {title: this.state.title}), 
+				React.createElement(HorizaontalMenu, {items: this.state.menu}), 
 				React.createElement("br", null), 
 				React.createElement(Search, {placeholder: this.state.placeholder, 
 						candidate: this.state.candidate, 
 						targetCandidate: this.state.candidateConfig, 
-						targetTable: this.state.table}), 
+						targetTable: this.state.table, 
+						keyword: this.state.keyword}), 
 				React.createElement("br", null), 
 				React.createElement(SimpleTable, {title: this.makeTitles(this.state.columnsConfig), 
 						columns: this.makeColumns(this.state.columnsConfig), 
