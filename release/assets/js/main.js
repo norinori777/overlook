@@ -56,7 +56,7 @@ var SearchActions = {
 					true,
 					function(inlineData){
 						var res = JSON.parse(inlineData.response);
-						this.dispatch(constants.GET_CANDIDATE, {candidate: res.candidate, keyword:data.keyword});
+						this.dispatch(constants.GET_CANDIDATE, {candidate: res.candidate, code: data.code});
 					}.bind(self)
 		);
 	},
@@ -91,7 +91,6 @@ var SearchStores = Fluxxor.createStore({
 		this.placeholder = '';
 		this.table = 'test';
 		this.candidateConfig = [];
-		this.keyword = '';
 		this.modal = 0;
 		this.menu = [
 			{table: 'test', title: 'norinori1'},
@@ -120,7 +119,6 @@ var SearchStores = Fluxxor.createStore({
 	onReGetConfig: function(payload){
 		this.data = [];
 		this.title = payload[0].title;
-		this.keyword = '';
 		this.candidate = [];
 		this.columnsConfig = payload[0].constructure;
 		this.candidateConfig = payload[0].candidate;
@@ -135,7 +133,6 @@ var SearchStores = Fluxxor.createStore({
 	},
 	onGetCandidate: function(payload){
 		this.candidate = payload.candidate;
-		this.keyword = payload.keyword;
 		this.emit('change');
 	},
 	onShowModal: function(payload){
@@ -150,7 +147,6 @@ var SearchStores = Fluxxor.createStore({
 		return {
 			data: this.data,
 			title: this.title,
-			keyword: this.keyword,
 			candidate: this.candidate,
 			columnsConfig: this.columnsConfig,
 			candidateConfig: this.candidateConfig,
@@ -261,7 +257,8 @@ var InputCandidate = React.createClass({displayName: "InputCandidate",
 						className: search__input, 
 						type: "search", 
 						placeholder: this.props.placeholder, 
-						onChange: this.getKeyWord}), 
+						onKeypress: this.getKeyWord, 
+						onKeyup: this.getKeyword}), 
 				React.createElement(List, {id: this.props.id, data: this.props.candidate})
 			)
 		);
@@ -526,12 +523,6 @@ StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var Main = React.createClass({displayName: "Main",
 	mixins: [FluxMixin, StoreWatchMixin('SearchStores')],
-	getInitialState: function(){
-		
-	},
-	componentWillMount: function(){
-		
-	},
 	componentDidMount: function(){
 		this.getFlux().actions.getConfig({table:this.state.table});
 	},
