@@ -34,18 +34,17 @@ var reGetConfig = function reGetConfig(data) {
 		data.dispatch({ type: constants.REGET_CONFIG, config: response });
 	});
 };
-
-function getCandidate(data) {
-	(0, _ControlData2.default)('GET', '/tableConfig' + '/candidate/' + data.keyword, false, data, function (inLineData) {
+var getCandidate = function getCandidate(data) {
+	(0, _ControlData2.default)('GET', '/' + data.table + '/candidate/' + data.keyword, false, data, function (inLineData) {
 		var response = JSON.parse(inLineData.response);
-		data.dispatch({ type: constants.GET_CANDIDATE, candidate: response.candidate });
+		data.dispatch({ type: constants.GET_CANDIDATE, candidate: response.candidate, keyword: data.keyword });
 	});
-}
+};
 
 var getData = function getData(data) {
-	(0, _ControlData2.default)('GET', '/tableConfig' + '/search/' + data.keyword, false, data, function (inLineData) {
+	(0, _ControlData2.default)('GET', '/' + data.table + '/search/' + data.keyword, false, data, function (inLineData) {
 		var response = JSON.parse(inLineData.response);
-		data.dispatch({ type: constants.GET_DATA, data: response.candidate });
+		data.dispatch({ type: constants.GET_DATA, data: response.data });
 	});
 };
 
@@ -137,14 +136,15 @@ function search() {
 			});
 		case constants.REGET_CONFIG:
 			return Object.assign({}, state, {
-				date: [],
+				data: [],
 				title: action.config[0].title,
 				candidate: [],
 				columnsConfig: action.config[0].constructure,
 				candidateConfig: action.config[0].candidate,
 				placeholder: action.config[0].placeholder,
 				table: action.config[0].table,
-				modal: 0
+				modal: 0,
+				keyword: ''
 			});
 		case constants.GET_DATA:
 			return Object.assign({}, state, {
@@ -152,7 +152,8 @@ function search() {
 			});
 		case constants.GET_CANDIDATE:
 			return Object.assign({}, state, {
-				candidate: action.candidate
+				candidate: action.candidate,
+				keyword: action.keyword
 			});
 		case constants.SHOW_MODAL:
 			return Object.assign({}, state, {
@@ -310,17 +311,13 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var InputCandidate = function (_React$Component) {
-	_inherits(InputCandidate, _React$Component);
+var InputCandidate = function (_Component) {
+	_inherits(InputCandidate, _Component);
 
 	function InputCandidate(props) {
 		_classCallCheck(this, InputCandidate);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(InputCandidate).call(this, props));
-
-		_this.state = {};
-		/*this.getKeyword = this._getKeyWord.bind(this)*/
-		return _this;
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(InputCandidate).call(this, props));
 	}
 
 	_createClass(InputCandidate, [{
@@ -341,14 +338,15 @@ var InputCandidate = function (_React$Component) {
 					className: search__input,
 					type: 'search',
 					placeholder: this.props.placeholder,
-					onChange: this.getKeyWord.bind(this) }),
+					onChange: this.getKeyWord.bind(this),
+					value: this.props.keyword }),
 				_react2.default.createElement(_List2.default, { id: this.props.id, data: this.props.candidate })
 			);
 		}
 	}]);
 
 	return InputCandidate;
-}(_react2.default.Component);
+}(_react.Component);
 
 exports.default = InputCandidate;
 
@@ -357,7 +355,8 @@ InputCandidate.propTypes = {
 	candidate: _react2.default.PropTypes.array.isRequired,
 	id: _react2.default.PropTypes.string.isRequired,
 	targetTable: _react2.default.PropTypes.string.isRequired,
-	targetCandidate: _react2.default.PropTypes.array.isRequired
+	targetCandidate: _react2.default.PropTypes.array.isRequired,
+	keyword: _react2.default.PropTypes.string
 };
 
 },{"../js/actions":1,"./List.js":7,"classNames":14,"react":185}],7:[function(require,module,exports){
@@ -461,8 +460,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Search = function (_React$Component) {
-	_inherits(Search, _React$Component);
+var Search = function (_Component) {
+	_inherits(Search, _Component);
 
 	function Search(props) {
 		_classCallCheck(this, Search);
@@ -475,7 +474,6 @@ var Search = function (_React$Component) {
 		value: function handleSearch(e) {
 			var target = document.getElementById('search');
 			(0, _actions.getData)({ keyword: target.value, table: this.props.targetTable, dispatch: this.props.dispatch });
-			dispatch((0, _actions.getData)({ keyword: target.value, table: this.props.targetTable }));
 		}
 	}, {
 		key: 'render',
@@ -491,10 +489,11 @@ var Search = function (_React$Component) {
 					targetTable: this.props.targetTable,
 					targetCandidate: this.props.targetCandidate,
 					type: 'text',
+					keyword: this.props.keyword,
 					dispatch: this.props.dispatch }),
 				_react2.default.createElement(
 					'a',
-					{ className: search__btn, onClick: this.handleSearch },
+					{ className: search__btn, onClick: this.handleSearch.bind(this) },
 					'検索'
 				)
 			);
@@ -502,7 +501,7 @@ var Search = function (_React$Component) {
 	}]);
 
 	return Search;
-}(_react2.default.Component);
+}(_react.Component);
 
 exports.default = Search;
 
@@ -511,7 +510,8 @@ Search.propTypes = {
 	placeholder: _react2.default.PropTypes.string.isRequired,
 	candidate: _react2.default.PropTypes.array,
 	targetCandidate: _react2.default.PropTypes.array.isRequired,
-	targetTable: _react2.default.PropTypes.string.isRequired
+	targetTable: _react2.default.PropTypes.string.isRequired,
+	keyword: _react2.default.PropTypes.string.isRequired
 };
 
 },{"../js/actions":1,"./InputCandidate.js":6,"classnames":15,"react":185,"react-redux":25}],9:[function(require,module,exports){
@@ -603,8 +603,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var SimpleModal = function (_React$Component) {
-	_inherits(SimpleModal, _React$Component);
+var SimpleModal = function (_Component) {
+	_inherits(SimpleModal, _Component);
 
 	function SimpleModal(props) {
 		_classCallCheck(this, SimpleModal);
@@ -677,18 +677,18 @@ var SimpleModal = function (_React$Component) {
 						{ className: footer },
 						_react2.default.createElement(
 							'a',
-							{ className: button, onClick: this.closeModal },
+							{ className: button, onClick: this.closeModal.bind(this) },
 							'閉じる'
 						)
 					)
 				),
-				_react2.default.createElement('div', { className: backdrop, onClick: this.closeModal })
+				_react2.default.createElement('div', { className: backdrop, onClick: this.closeModal.bind(this) })
 			);
 		}
 	}]);
 
 	return SimpleModal;
-}(_react2.default.Component);
+}(_react.Component);
 
 exports.default = SimpleModal;
 
@@ -789,7 +789,7 @@ var SimpleTable = function (_React$Component) {
 			for (i = 0; i < values.length; i++) {
 				body.push(_react2.default.createElement(
 					'tr',
-					{ className: record, onClick: this.handleModal },
+					{ className: record, onClick: this.handleModal.bind(this) },
 					this.renderRow(values[i], i, config)
 				));
 			}
@@ -935,10 +935,7 @@ var Main = function (_Component) {
 	function Main(props) {
 		_classCallCheck(this, Main);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Main).call(this, props));
-
-		_this.state = {};
-		return _this;
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(Main).call(this, props));
 	}
 
 	_createClass(Main, [{
@@ -981,6 +978,7 @@ var Main = function (_Component) {
 					candidate: this.props.candidate,
 					targetCandidate: this.props.candidateConfig,
 					targetTable: this.props.table,
+					keyword: this.props.keyword,
 					dispatch: this.props.dispatch }),
 				_react2.default.createElement('br', null),
 				_react2.default.createElement(_SimpleTable2.default, _defineProperty({ title: this.makeTitles(this.props.columnsConfig),
