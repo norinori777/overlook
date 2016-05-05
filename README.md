@@ -8,10 +8,10 @@
 * 利用技術
 	* react.js
 	* Flux
-		* Fluxxor
+		* Redux
 	* gulp
 	* browserify
-	* reactify
+	* babelify
 	* SASS
 	* CSS
 		* BEM
@@ -32,11 +32,19 @@
 	* SimpleModal
 		* モーダルを表示、今回の構成としては、テーブルのレコードをクリック時にレコード内容を表示したモーダルを表示するようにした。
 	* main
-		* 各コンポートをまとめたメインページ
+		* Reduxのコンテナーを実装。
+		* 各コンポートをまとめたメインページ。
 
-* Fluxxor
-	* SearchAction.js
-	* SearchStore.js
+* Redux
+	* actions
+		* index.js
+			* actionを実装。
+	* reducer
+		* search.js
+			* Reducerを実装。actionからの要求を基にStoreを更新
+
+* 課題
+	* Reduxのdispatchは、コンテナーのmainにpropsとして、受け渡されるが、コンテナー配下のコンポーネントには、バケツリレーで受け渡している。バケツリレーを回避するためのFluxだったため、他の実装方法を検討中。
 
 
 
