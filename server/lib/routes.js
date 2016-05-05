@@ -23,7 +23,7 @@ configRoutes = function(app, server){
 		);
 	});*/
 
-	app.get('/:obj_type/candidate/:keyword',function(req,res){
+	app.get('/:obj_type/candidate/:keyword?',function(req,res){
 		var
 		filter = {table: req.params.obj_type},
 		choice = {'_id': 0, 'candidate': 1};
@@ -62,7 +62,7 @@ configRoutes = function(app, server){
 
 	app.get('/:obj_type/config/:table',function(req,res){
 		var filter = {'table': req.params.table},
-		choice = {_id: 0, table: 1, constructure: 1, candidate: 1};
+		choice = {_id: 0, table: 1, constructure: 1, candidate: 1, title: 1, placeholder: 1};
 		crud.read(
 			'tableConfig',
 			filter, choice,
@@ -72,14 +72,15 @@ configRoutes = function(app, server){
 		);		
 	});
 
-	app.get('/:obj_type/search/:keyword', function(req,res){
+	app.get('/:obj_type/search/:keyword?', function(req,res){
 		var
 		filter = {table: req.params.obj_type},
 		choice = {'_id': 0, 'candidate': 1};
 		crud.read(
 			'tableConfig', filter, choice,
 			function(map_list){
-				var filter = {"$or":[]}, obj, param,
+				var
+				filter = {"$or":[]}, obj, param,
 				i, filter, choice = {}, regexp = new RegExp("^" + req.params.keyword);
 				for(i = 0; i < map_list[0].candidate.length; i++){
 					param = map_list[0].candidate[i];
@@ -87,6 +88,7 @@ configRoutes = function(app, server){
 					obj[param]  = {$regex: regexp};
 					filter["$or"].push(obj);
 				}
+				req.params.keyword === undefined ? filter = {} : filter
 				crud.read(
 					req.params.obj_type,
 					filter, choice,

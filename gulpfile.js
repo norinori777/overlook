@@ -1,4 +1,5 @@
-var gulp = require('gulp'),
+var
+gulp = require('gulp'),
 sass = require('gulp-sass'),
 cssnext = require('gulp-cssnext'),
 plumber = require('gulp-plumber'),
@@ -6,16 +7,18 @@ sourcemaps = require('gulp-sourcemaps')
 using = require('gulp-using'),
 karma = require('gulp-karma'),
 browserify = require('browserify'),
+babelify = require('babelify'),
 source = require('vinyl-source-stream'),
 buffer = require('vinyl-buffer'),
-reactify = require('reactify'),
 webserver = require('gulp-webserver');
 
 
-gulp.task('default',['copy','watch','karma']);
+/*gulp.task('default',['copy','watch','karma']);
+*/gulp.task('default',['copy','watch']);
 
 gulp.task('watch',function(){
 	gulp.watch('./develop/assets/jsx/**/*.js', ['build']);
+	gulp.watch('./develop/assets/js/**/*.js', ['build'])
 	gulp.watch('./develop/assets/sass/**/*.scss', ['sass']);
 });
 
@@ -32,14 +35,14 @@ gulp.task('sass',function(){
 });
 
 gulp.task('build', function () {
-	browserify('./develop/assets/jsx/main.js')
-		.transform(reactify)
+	browserify('./develop/assets/js/app.js')
+		.transform(babelify)
 		.bundle()
 		.on("error", function(err){
 			console.log("error:" + err.message);
 			console.log("error:" + err.stack);
 		})
-		.pipe(source('main.js'))
+		.pipe(source('app.js'))
 		.pipe(buffer())
 		.pipe(sourcemaps.init({loadMaps:true}))
 		.pipe(sourcemaps.write('./'))

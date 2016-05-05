@@ -1,0 +1,150 @@
+@mixin clearfix {
+  *zoom: 1;
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin hover { 
+  &:hover { @content };
+}
+
+@mixin box-shadow($value...) {
+　　box-shadow: $value;
+}
+
+@mixin button-size($padding-y, $padding-x, $font-size, $border-radius) { 
+  padding: $padding-y $padding-x;
+  font-size: $font-size; 
+  border-radius: $border-radius; 
+}
+
+@mixin button-variant($color, $background, $border) { 
+  $active-background: darken($background, 10%); 
+  $active-border: darken($border, 12%); 
+  color: $color; 
+  background-color: $background; 
+  border-color: $border; 
+  @include box-shadow($btn-box-shadow); 
+  @include hover { 
+    color: $color; 
+    background-color: $active-background; 
+        border-color: $active-border; 
+  } 
+  &:focus, 
+  &.focus { 
+    color: $color; 
+    background-color: $active-background; 
+        border-color: $active-border; 
+  } 
+  &:active, 
+  &.active, 
+  .open > &.dropdown-toggle { 
+    color: $color; 
+    background-color: $active-background; 
+        border-color: $active-border; 
+    // Remove the gradient for the pressed/active state 
+    background-image: none; 
+    @include box-shadow($btn-active-box-shadow); 
+    &:hover, 
+    &:focus, 
+    &.focus { 
+      color: $color; 
+      background-color: darken($background, 17%); 
+          border-color: darken($border, 25%); 
+    } 
+  }
+  &.disabled, 
+  &:disabled { 
+    &:focus, 
+    &.focus { 
+      background-color: $background; 
+          border-color: $border; 
+    } 
+    @include hover { 
+      background-color: $background; 
+          border-color: $border; 
+    } 
+  } 
+} 
+
+// table
+@mixin table-row-variant($state, $background) { 
+  // Exact selectors below required to override `.table-striped` and prevent 
+  // inheritance to nested tables. 
+ .table-#{$state} { 
+   &, 
+   > th, 
+   > td { 
+      background-color: $background; 
+    } 
+  } 
+ 
+   // Hover states for `.table-hover` 
+   // Note: this is not available for cells or rows within `thead` or `tfoot`. 
+  .table-hover { 
+    $hover-background: darken($background, 5%); 
+ 
+   .table-#{$state} { 
+     @include hover { 
+       background-color: $hover-background; 
+ 
+       > td, 
+       > th { 
+         background-color: $hover-background; 
+       } 
+     } 
+   } 
+ } 
+} 
+
+
+// Transitions
+@mixin transition($transition...) {
+  -webkit-transition: $transition;
+       -o-transition: $transition;
+          transition: $transition;
+}
+@mixin transition-property($transition-property...) {
+  -webkit-transition-property: $transition-property;
+          transition-property: $transition-property;
+}
+@mixin transition-delay($transition-delay) {
+  -webkit-transition-delay: $transition-delay;
+          transition-delay: $transition-delay;
+}
+@mixin transition-duration($transition-duration...) {
+  -webkit-transition-duration: $transition-duration;
+          transition-duration: $transition-duration;
+}
+@mixin transition-timing-function($timing-function) {
+  -webkit-transition-timing-function: $timing-function;
+          transition-timing-function: $timing-function;
+}
+@mixin transition-transform($transition...) {
+  -webkit-transition: -webkit-transform $transition;
+     -moz-transition: -moz-transform $transition;
+       -o-transition: -o-transform $transition;
+          transition: transform $transition;
+}
+
+@mixin translate($x, $y) {
+  -webkit-transform: translate($x, $y);
+      -ms-transform: translate($x, $y); // IE9 only
+       -o-transform: translate($x, $y);
+          transform: translate($x, $y);
+}
+
+
+// Opacity
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  // IE8 filter
+  $opacity-ie: ($opacity * 100);
+  filter: alpha(opacity=$opacity-ie);
+}
+
+
+
