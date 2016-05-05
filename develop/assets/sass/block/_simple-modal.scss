@@ -1,0 +1,96 @@
+.simple-modal{
+  overflow: hidden;
+  width: 50%;
+  position: fixed;
+  top: 20%;
+  left: 30%;
+  z-index: $zindex-modal;
+  -webkit-overflow-scrolling: touch;
+
+  background-color: $modal-content-bg;
+  border: 1px solid $modal-content-fallback-border-color; //old browsers fallback (ie8 etc)
+  border: 1px solid $modal-content-border-color;
+  border-radius: $modal-radius;
+  @include box-shadow(0 3px 9px rgba(0,0,0,.5));
+  background-clip: padding-box;
+  // Remove focus outline from opened modal
+  outline: 0;
+
+  // When fading in the modal, animate it to slide down
+  //&.fade .modal-dialog {
+  &.fade {
+  	display: none;
+    @include translate(0, -25%);
+    @include transition-transform(0.3s ease-out);
+  }
+  //  &.in .modal-dialog { 
+  &.in { 
+	display: block;
+  	@include translate(0, 0) }
+
+  .modal-open .modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  // Shell div to position the modal with bottom padding
+  .modal-dialog {
+    position: relative;
+    width: auto;
+    margin: 10px;
+  }
+
+  .simple-modal__header{
+    background-color: $main-color;
+    text-align: center;
+    font-size: $font-size-h5;
+    color: white;
+    padding: $modal-title-padding;
+    border-bottom: 1px solid $modal-header-border-color;
+    @include clearfix;
+  }
+  
+  .simple-modal__body{
+    position: relative;
+    padding: $modal-inner-padding;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: .5rem;
+  }
+
+  .simple-modal__footer{
+    float: right;
+    margin-right: .5rem;
+    margin-bottom: .5rem;
+  }
+
+  .simple-modal__button{
+
+  }
+
+  .simple-modal__title{
+  	padding-left: 0.5rem;
+  	font-size: $font-size-h6;
+    font-weight: bold;
+  	margin-bottom: 0.25rem;
+  }
+  
+  .simple-modal__content{
+  	margin-bottom: 1rem;
+    padding-left: .9rem;
+    color: #72746f;
+  }
+}
+
+.simple-modal__backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: $zindex-modal-background;
+  background-color: $modal-backdrop-bg;
+  // Fade for backdrop
+  &.fade { display: none; @include opacity(0); }
+  &.in { display: block; @include opacity($modal-backdrop-opacity); }
+}
