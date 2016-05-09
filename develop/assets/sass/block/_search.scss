@@ -1,21 +1,76 @@
 .search{
-  width: 70%;
   margin: 0 auto;
-  @include clearfix
-  .search__input{
-  	float:left;
-  	margin-right: 5px;
-  	width: 75%;
+  &__input{
   	height: 2rem;
   }
-  .search__button{
-  	float:left;
-  	width: 15%;
+  &__button{
   	height: 2rem;
   }
-  .search__button.btn{
+  &__button.btn{
 	padding-top: 0.25em;
 	padding-bottom: 0.25em;
 	vertical-align: middle;
   } 
+}
+
+@media #{$small} {
+  .search{
+    width: 100%;
+    @include clearfix
+    &__input {
+        box-sizing: border-box;
+        width: 80%;
+        margin: 0 1rem 0.5rem 1rem;
+    }
+    &__button {
+        width: 70px;
+        margin: 0 1rem 0 1rem;
+    }
+  }
+}
+@media #{$middle} {
+  .search{
+    width: 600px;
+    @include clearfix
+    &__input {
+      float:left;
+      width: 450px;
+      margin: 0 0.3rem 0 1rem;
+
+    }
+    &__button {
+      float:left;
+      width: 70px;
+    }
+  }
+}
+@media #{$large} {
+  .search{
+    width: 700px;
+    @include clearfix
+    &__input {
+      float:left;
+      margin: 0 0.3rem 0 1rem;
+      width: 500px;
+    }
+    &__button {
+      float:left;
+      width: 100px;
+    }
+  }
+}
+@media #{$xlarge}{
+  .search{
+    width: 700px;
+    @include clearfix
+    &__input {
+      float:left;
+      margin: 0 0.3rem 0 1rem;
+      width: 500px;
+    }
+    &__button {
+      float:left;
+      width: 100px;
+    }
+  }
 }
