@@ -1,5 +1,5 @@
 .horizontalMenu {
-	.horizontalMenu__list {
+	&__list {
 		@include clearfix
 		margin: 0;
 		padding-top: $horizontalmenu-padding-x;
@@ -7,16 +7,16 @@
 		list-style: none;
 		background-color: $sub-color;
 
-		>li {
+		& > li {
 			border-right: solid 1px #C8C8C8;
 		}
 
-		> li:first-child {
+		& > li:first-child {
 			border-left: solid 1px #C8C8C8;
 		}
 	}
 
-	.horizontalMenu__item {
+	&__item {
 		float: left;
 		width: auto;
 		text-align: center;
@@ -30,26 +30,29 @@
 			color: $main-color;
 		}
 	}
-	.horizontalMenu--2 {
+
+	&--2 {
 			width: 48%;
 	}
-	.horizontalMenu--3 {
+	&--3 {
 			width: 31%;
 	}
-	.horizontalMenu--4 {
+	&--4 {
 			width: 23%;
 	}
-	.horizontalMenu--5 {
+	&--5 {
 			width: 18%;
 	}
-	.horizontalMenu--6 {
+	&--6 {
 			width: 14%;
 	}
-	.horizontalMenu--7 {
+	&--7 {
 			width: 12%;
 	}
-	.horizontalMenu--8 {
+	&--8 {
 			width: 10%;
 	}
-
 }
+
+
+

@@ -57,7 +57,7 @@ export default class SimpleTable extends Component {
 	render(){
 		let
 		isHide = this.props.rows.length === 0 ? true : false, 
-		table = classNames('simple-table',{'simple-table--hide': isHide}, 'table--responsive'),
+		table = classNames('simple-table', 'table--responsive', {'simple-table--hide': isHide}),
 		head = classNames('simple-table__head'),
 		body = classNames('simple-table__body')
 

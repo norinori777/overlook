@@ -1,50 +1,66 @@
+.table--responsive { 
+  display: block; 
+  min-height: .01%; // Workaround for IE9 bug (see https://github.com/twbs/bootstrap/issues/14837) 
+  overflow-x: auto; 
+
+  // TODO: find out if we need this still. 
+  // 
+  // border: $table-border-width solid $table-border-color; 
+  // -ms-overflow-style: -ms-autohiding-scrollbar; // See https://github.com/twbs/bootstrap/pull/10057 
+} 
+
 .simple-table { 
   width: 60%; 
   max-width: 100%; 
   margin-bottom: $spacer;
   margin: 0 auto;
+  background-color: $body-bg; 
 
   th, td { 
     padding: $table-cell-padding; 
     vertical-align: top; 
   }
 
-  &.simple-table--hide {
+  &--hide {
     display: none;
   }
 
-  .simple-table {
-    background-color: $body-bg; 
-  } 
-
-  .simple-table__head{
+  &__head{
     & th {
       vertical-align: bottom;
       border-bottom: (2 * $table-border-width) solid $table-border-color;
     }
   }
-  .simple-table__body{
+  &__body{
     & th,td {
       border-bottom: (1 * $table-border-width) solid $table-border-color;
     }
   }
-  .simple-table__record{
+  &__record{
     &:hover {
       background-color: $table-bg-hover;
     }
 
   }
   @media #{$small} {
-    width: 500px;
+    & {
+      width: 500px;
+    }
   }
   @media #{$middle} {
-    width: 600px;
+    & {
+      width: 600px;
+    }
   }
   @media #{$large} {
-    width: 700px;
+    & {
+      width: 700px;
+    }
   }
   @media #{$xlarge}{
-    width: 1000px;
+    & {
+      width: 700px;
+    }
   }
 
 }
@@ -58,13 +74,4 @@
 @include table-row-variant(danger, $state-danger-bg); 
 
 
-.table--responsive { 
-  display: block; 
-  min-height: .01%; // Workaround for IE9 bug (see https://github.com/twbs/bootstrap/issues/14837) 
-  overflow-x: auto; 
 
-  // TODO: find out if we need this still. 
-  // 
-  // border: $table-border-width solid $table-border-color; 
-  // -ms-overflow-style: -ms-autohiding-scrollbar; // See https://github.com/twbs/bootstrap/pull/10057 
-} 

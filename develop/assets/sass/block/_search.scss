@@ -15,7 +15,7 @@
 
 @media #{$small} {
   .search{
-    width: 100%;
+    max-width: 100%;
     @include clearfix
     &__input {
         box-sizing: border-box;

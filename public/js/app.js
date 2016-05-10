@@ -95,7 +95,7 @@ var initialState = {
 	table: 'test',
 	candidateConfig: [],
 	modal: 0,
-	menu: [{ table: 'test', title: 'norinori1' }, { table: 'test2', title: 'norinori2' }, { table: 'test3', title: 'norinori3' }, { table: 'test4', title: 'norinori4' }]
+	menu: [{ table: 'test', title: 'norinori1' }, { table: 'test2', title: 'norinori2' }, { table: 'test3', title: 'norinori3' }, { table: 'test4', title: 'norinori4' }, { table: 'test7', title: '大量カラム' }]
 };
 var store = (0, _redux.createStore)(_search2.default, initialState);
 
@@ -204,8 +204,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = require('react-redux');
-
 var _actions = require('../js/actions');
 
 var _classnames = require('classnames');
@@ -220,8 +218,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var HorizontalMenu = function (_React$Component) {
-	_inherits(HorizontalMenu, _React$Component);
+var HorizontalMenu = function (_Component) {
+	_inherits(HorizontalMenu, _Component);
 
 	function HorizontalMenu(props) {
 		_classCallCheck(this, HorizontalMenu);
@@ -271,7 +269,7 @@ var HorizontalMenu = function (_React$Component) {
 	}]);
 
 	return HorizontalMenu;
-}(_react2.default.Component);
+}(_react.Component);
 
 exports.default = HorizontalMenu;
 
@@ -280,7 +278,7 @@ HorizontalMenu.propTypes = {
 	items: _react2.default.PropTypes.array.isRequired
 };
 
-},{"../js/actions":1,"classnames":15,"react":185,"react-redux":25}],6:[function(require,module,exports){
+},{"../js/actions":1,"classnames":15,"react":185}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -384,8 +382,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var List = function (_React$Component) {
-	_inherits(List, _React$Component);
+var List = function (_Component) {
+	_inherits(List, _Component);
 
 	function List(props) {
 		_classCallCheck(this, List);
@@ -417,7 +415,7 @@ var List = function (_React$Component) {
 	}]);
 
 	return List;
-}(_react2.default.Component);
+}(_react.Component);
 
 exports.default = List;
 
@@ -539,8 +537,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var simpleHeader = function (_React$Component) {
-	_inherits(simpleHeader, _React$Component);
+var simpleHeader = function (_Component) {
+	_inherits(simpleHeader, _Component);
 
 	function simpleHeader(props) {
 		_classCallCheck(this, simpleHeader);
@@ -567,7 +565,7 @@ var simpleHeader = function (_React$Component) {
 	}]);
 
 	return simpleHeader;
-}(_react2.default.Component);
+}(_react.Component);
 
 exports.default = simpleHeader;
 
@@ -731,8 +729,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var SimpleTable = function (_React$Component) {
-	_inherits(SimpleTable, _React$Component);
+var SimpleTable = function (_Component) {
+	_inherits(SimpleTable, _Component);
 
 	function SimpleTable(props) {
 		_classCallCheck(this, SimpleTable);
@@ -829,7 +827,7 @@ var SimpleTable = function (_React$Component) {
 		key: 'render',
 		value: function render() {
 			var isHide = this.props.rows.length === 0 ? true : false,
-			    table = (0, _classnames2.default)('simple-table', { 'simple-table--hide': isHide }, 'table--responsive'),
+			    table = (0, _classnames2.default)('simple-table', 'table--responsive', { 'simple-table--hide': isHide }),
 			    head = (0, _classnames2.default)('simple-table__head'),
 			    body = (0, _classnames2.default)('simple-table__body');
 
@@ -864,7 +862,7 @@ var SimpleTable = function (_React$Component) {
 	}]);
 
 	return SimpleTable;
-}(_react2.default.Component);
+}(_react.Component);
 
 exports.default = SimpleTable;
 

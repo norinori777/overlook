@@ -95,7 +95,7 @@ var initialState = {
 	table: 'test',
 	candidateConfig: [],
 	modal: 0,
-	menu: [{ table: 'test', title: 'norinori1' }, { table: 'test2', title: 'norinori2' }, { table: 'test3', title: 'norinori3' }, { table: 'test4', title: 'norinori4' }]
+	menu: [{ table: 'test', title: 'norinori1' }, { table: 'test2', title: 'norinori2' }, { table: 'test3', title: 'norinori3' }, { table: 'test4', title: 'norinori4' }, { table: 'test7', title: '大量カラム' }]
 };
 var store = (0, _redux.createStore)(_search2.default, initialState);
 
@@ -827,7 +827,7 @@ var SimpleTable = function (_Component) {
 		key: 'render',
 		value: function render() {
 			var isHide = this.props.rows.length === 0 ? true : false,
-			    table = (0, _classnames2.default)('simple-table', { 'simple-table--hide': isHide }, 'table--responsive'),
+			    table = (0, _classnames2.default)('simple-table', 'table--responsive', { 'simple-table--hide': isHide }),
 			    head = (0, _classnames2.default)('simple-table__head'),
 			    body = (0, _classnames2.default)('simple-table__body');
 

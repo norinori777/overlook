@@ -18,7 +18,8 @@ const initialState = {
 		{table: 'test', title: 'norinori1'},
 		{table: 'test2', title: 'norinori2'},
 		{table: 'test3', title: 'norinori3'},
-		{table: 'test4', title: 'norinori4'}
+		{table: 'test4', title: 'norinori4'},
+		{table: 'test7', title: '大量カラム'}
 	]
 }
 const store = createStore(search, initialState)
