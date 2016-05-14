@@ -53,6 +53,9 @@ configRoutes = function(app, server){
 								}
 							}
 						}
+						items = items.filter(function(x, i, self){
+							return self.indexOf(x) === i;
+						})
 						res.json({candidate:items});
 					}
 				);

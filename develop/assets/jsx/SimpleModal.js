@@ -32,7 +32,7 @@ export default class SimpleModal extends Component {
 		header = classNames({'simple-modal__header': showModal}),
 		body = classNames({'simple-modal__body': showModal}),
 		footer = classNames({'simple-modal__footer': showModal}),
-		button = classNames('btn', 'btn--info'),
+		button = classNames('btn', 'btn--info', 'btn--sm'),
 		backdrop = classNames('simple-modal__backdrop', 'fade', {'in': showModal})
 
 		return (

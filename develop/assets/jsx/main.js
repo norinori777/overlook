@@ -31,6 +31,20 @@ class Main extends Component {
 		}
 		return columns
 	}
+	makeSizes(config){
+		let sizes = [], i;
+		for(i = 0; i < config.length; i++){
+			sizes.push(config[i].size)
+		}
+		return sizes
+	}
+	makeVisible(config){
+		let visible = [], i;
+		for(i = 0; i < config.length; i++){
+			visible.push(config[i].visible)
+		}
+		return visible
+	}
 	render(){
 		return(
 			<div>
@@ -47,6 +61,8 @@ class Main extends Component {
 				<br />
 				<SimpleTable title={this.makeTitles(this.props.columnsConfig)}
 						columns={this.makeColumns(this.props.columnsConfig)}
+						sizes={this.makeSizes(this.props.columnsConfig)}
+						visible={this.makeVisible(this.props.columnsConfig)}
 						rows={this.props.data}
 						modal={this.props.modal}
 						isSetNum={true} dispatch={this.props.dispatch}

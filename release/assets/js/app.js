@@ -651,7 +651,7 @@ var SimpleModal = function (_Component) {
 			    header = (0, _classnames2.default)({ 'simple-modal__header': showModal }),
 			    body = (0, _classnames2.default)({ 'simple-modal__body': showModal }),
 			    footer = (0, _classnames2.default)({ 'simple-modal__footer': showModal }),
-			    button = (0, _classnames2.default)('btn', 'btn--info'),
+			    button = (0, _classnames2.default)('btn', 'btn--info', 'btn--sm'),
 			    backdrop = (0, _classnames2.default)('simple-modal__backdrop', 'fade', { 'in': showModal });
 
 			return _react2.default.createElement(
@@ -757,9 +757,14 @@ var SimpleTable = function (_Component) {
 		}
 	}, {
 		key: 'renderHead',
-		value: function renderHead(values) {
+		value: function renderHead(values, sizes, visible) {
 			var head = [],
-			    i = void 0;
+			    i = void 0,
+			    small = void 0,
+			    middle = void 0,
+			    large = void 0,
+			    xlarge = void 0,
+			    size = void 0;
 
 			if (this.props.isSetNum) {
 				head.push(_react2.default.createElement(
@@ -769,17 +774,29 @@ var SimpleTable = function (_Component) {
 				));
 			}
 			for (i = 0; i < values.length; i++) {
-				head.push(_react2.default.createElement(
-					'th',
-					null,
-					values[i]
-				));
+				if (visible[i]) {
+					small = sizes[i] === 's' ? true : false;
+					middle = sizes[i] === 'm' ? true : false;
+					large = sizes[i] === 'l' ? true : false;
+					xlarge = sizes[i] === 'xl' ? true : false;
+
+					size = (0, _classnames2.default)({ 'simple-table__item--small': small,
+						'simple-table__item--middle': middle,
+						'simple-table__item--large': large,
+						'simple-table__item--xlarge': xlarge });
+
+					head.push(_react2.default.createElement(
+						'th',
+						{ className: size },
+						values[i]
+					));
+				}
 			}
 			return head;
 		}
 	}, {
 		key: 'renderBody',
-		value: function renderBody(values, config) {
+		value: function renderBody(values, config, visible) {
 			var body = [],
 			    i = void 0,
 			    record = (0, _classnames2.default)('simple-table__record');
@@ -788,14 +805,14 @@ var SimpleTable = function (_Component) {
 				body.push(_react2.default.createElement(
 					'tr',
 					{ className: record, onClick: this.handleModal.bind(this) },
-					this.renderRow(values[i], i, config)
+					this.renderRow(values[i], i, config, visible)
 				));
 			}
 			return body;
 		}
 	}, {
 		key: 'renderRow',
-		value: function renderRow(values, num, config) {
+		value: function renderRow(values, num, config, visible) {
 			var row = [],
 			    i = void 0;
 
@@ -807,18 +824,20 @@ var SimpleTable = function (_Component) {
 				));
 			}
 			for (i = 0; i < config.length; i++) {
-				if (values[config[i]] == undefined) {
-					row.push(_react2.default.createElement(
-						'td',
-						null,
-						'－'
-					));
-				} else {
-					row.push(_react2.default.createElement(
-						'td',
-						null,
-						values[config[i]]
-					));
+				if (visible[i]) {
+					if (values[config[i]] == undefined) {
+						row.push(_react2.default.createElement(
+							'td',
+							null,
+							'－'
+						));
+					} else {
+						row.push(_react2.default.createElement(
+							'td',
+							null,
+							values[config[i]]
+						));
+					}
 				}
 			}
 			return row;
@@ -843,13 +862,13 @@ var SimpleTable = function (_Component) {
 						_react2.default.createElement(
 							'tr',
 							null,
-							this.renderHead(this.props.title)
+							this.renderHead(this.props.title, this.props.sizes, this.props.visible)
 						)
 					),
 					_react2.default.createElement(
 						'tbody',
 						{ className: body },
-						this.renderBody(this.props.rows, this.props.columns)
+						this.renderBody(this.props.rows, this.props.columns, this.props.visible)
 					)
 				),
 				_react2.default.createElement(
@@ -871,6 +890,8 @@ SimpleTable.propTypes = {
 	title: _react2.default.PropTypes.array.isRequired,
 	rows: _react2.default.PropTypes.array.isRequired,
 	columns: _react2.default.PropTypes.array.isRequired,
+	sizes: _react2.default.PropTypes.array.isRequired,
+	visible: _react2.default.PropTypes.array.isRequired,
 	modal: _react2.default.PropTypes.number.isRequired
 };
 
@@ -963,6 +984,26 @@ var Main = function (_Component) {
 			return columns;
 		}
 	}, {
+		key: 'makeSizes',
+		value: function makeSizes(config) {
+			var sizes = [],
+			    i = void 0;
+			for (i = 0; i < config.length; i++) {
+				sizes.push(config[i].size);
+			}
+			return sizes;
+		}
+	}, {
+		key: 'makeVisible',
+		value: function makeVisible(config) {
+			var visible = [],
+			    i = void 0;
+			for (i = 0; i < config.length; i++) {
+				visible.push(config[i].visible);
+			}
+			return visible;
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			return _react2.default.createElement(
@@ -981,6 +1022,8 @@ var Main = function (_Component) {
 				_react2.default.createElement('br', null),
 				_react2.default.createElement(_SimpleTable2.default, _defineProperty({ title: this.makeTitles(this.props.columnsConfig),
 					columns: this.makeColumns(this.props.columnsConfig),
+					sizes: this.makeSizes(this.props.columnsConfig),
+					visible: this.makeVisible(this.props.columnsConfig),
 					rows: this.props.data,
 					modal: this.props.modal,
 					isSetNum: true, dispatch: this.props.dispatch

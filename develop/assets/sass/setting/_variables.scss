@@ -108,6 +108,11 @@ $table-bg-active:               $table-bg-hover !default;
 $table-border-width:            $border-width !default; 
 $table-border-color:            $gray-lighter !default; 
 
+$table-column-size-small:		3rem;
+$table-column-size-middle:		6rem;
+$table-column-size-large:		9rem;
+$table-column-size-xlarge:		12rem;
+
 $spacer:   1rem !default;
 
 $horizontalmenu-padding-x: 0.625rem;
